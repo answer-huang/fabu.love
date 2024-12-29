@@ -1,26 +1,23 @@
 name: Docker Image CI
 
+# on:
+#   push:
+#     branches: [ "master" ]
+#   pull_request:
+#     branches: [ "master" ]
+
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_dispatch:
+    inputs:
+      example_input:
+        description: 'This is an example input'
+        required: true
+        default: 'default_value'
 
 jobs:
-
-  # build:
-
-    # runs-on: ubuntu-latest
-
-    # steps:
-    # - uses: actions/checkout@v4
-    # - name: Build the Docker image
-      # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      # run: docker buildx build -t fabulove:$(date +%s) --platform=linux/amd64 -f docker/Dockerfile .
-
   build_and_push:
     name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
           packages: write
           contents: read
@@ -55,10 +52,3 @@ jobs:
               push: true
               tags: answerhuang/fabulove:${{ env.TIMESTAMP }}
               labels: ${{ steps.meta.outputs.labels }}
-
-          # - name: Generate artifact attestation
-          #   uses: actions/attest-build-provenance@v2
-          #   with:
-          #     subject-name: answerhuang/fabulove
-          #     subject-digest: ${{ steps.push.outputs.digest }}
-          #     push-to-registry: true
