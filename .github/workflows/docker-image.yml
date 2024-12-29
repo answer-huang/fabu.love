@@ -42,6 +42,10 @@ jobs:
             with:
               images: answerhuang/fabulove
 
+          - name: Set current timestamp
+            id: timestamp
+            run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+        
           - name: Build and push Docker image
             id: push
             uses: docker/build-push-action@v3
@@ -49,7 +53,7 @@ jobs:
               context: .
               file: ./docker/Dockerfile
               push: true
-              tags: $(date +%s)
+              tags: answerhuang/fabulove:${{ env.TIMESTAMP }}
               labels: ${{ steps.meta.outputs.labels }}
 
           # - name: Generate artifact attestation
