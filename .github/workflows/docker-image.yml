@@ -49,7 +49,7 @@ jobs:
               context: .
               file: ./docker/Dockerfile
               push: true
-              tags: answerhuang/fabulove:${{ env.TIMESTAMP }}
+              tags: ${{ env.TIMESTAMP }}
               labels: ${{ steps.meta.outputs.labels }}
 
           # - name: Generate artifact attestation
