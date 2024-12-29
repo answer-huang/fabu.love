@@ -9,10 +9,10 @@ name: Docker Image CI
 on:
   workflow_dispatch:
     inputs:
-      example_input:
-        description: 'This is an example input'
+      image_tag:
+        description: 'Please input image tag'
         required: true
-        default: 'default_value'
+        default: ''
 
 jobs:
   build_and_push:
@@ -42,7 +42,11 @@ jobs:
           - name: Set current timestamp
             id: timestamp
             run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-        
+
+          - name: Set default image tag if not provided
+            if: ${{ github.event.inputs.image_tag == '' }}
+            run: echo "IMAGE_TAG=${{ env.TIMESTAMP }}" >> $GITHUB_ENV
+
           - name: Build and push Docker image
             id: push
             uses: docker/build-push-action@v3
@@ -50,5 +54,5 @@ jobs:
               context: .
               file: ./docker/Dockerfile
               push: true
-              tags: answerhuang/fabulove:${{ env.TIMESTAMP }}
+              tags: answerhuang/fabulove:${{ github.event.inputs.image_tag }}
               labels: ${{ steps.meta.outputs.labels }}
