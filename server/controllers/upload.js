@@ -319,13 +319,8 @@ function parseApk(filename) {
     parser.parse().then(result => {
       let label = undefined;
 
-      if ( result.application && result.application.label ) {
-        // label 可能是数组或字符串，需要分别处理
-        if ( Array.isArray(result.application.label) && result.application.label.length > 0 ) {
-          label = result.application.label[0];
-        } else if ( typeof result.application.label === 'string' ) {
-          label = result.application.label;
-        }
+      if ( result.application && result.application.label && result.application.label.length > 0 ) {
+        label = result.application.label[0];
       }
 
       if ( label ) {

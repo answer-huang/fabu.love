@@ -118,7 +118,7 @@ module.exports = class AuthRouter {
                 username: user.username,
                 email: user.email
             },
-            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30) // 30天
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
         }, config.secret)
         ctx.body = responseWrapper(user)
     }
