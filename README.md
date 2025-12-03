@@ -3,7 +3,9 @@ typora-copy-images-to: ./screenshots
 ---
 
 # 本地调试镜像
+
 ### 本地调试镜像
+
 ```shell
 
 COMPOSE_DOCKER_CLI_BUILD=1 \
@@ -13,7 +15,9 @@ docker-compose up -d --build
 ```
 
 # 如何自己编译镜像
+
 ### 编译镜像
+
 ```shell
 
 docker buildx build -t fabulove:202411272235 --platform=linux/amd64 -f docker/Dockerfile .
@@ -21,6 +25,7 @@ docker buildx build -t fabulove:202411272235 --platform=linux/amd64 -f docker/Do
 ```
 
 ### 推送镜像
+
 ```shell
 
 docker push fabulove:202411272235
@@ -28,10 +33,12 @@ docker push fabulove:202411272235
 ```
 
 ### 修改 docker-compose.yml
+
 * image 改为 fabulove:202411272235
 * FABU_BASE_URL 改为自己的域名
 
 ### 运行镜像
+
 在 docker 目录下, 运行 docker-compose 命令
 
 ```shell
@@ -42,7 +49,9 @@ docker-compose up -d
 ```
 
 # 运行
+
 docker-compose (使用构建好的镜像)
+
 ```yaml
 
 services:
@@ -84,6 +93,7 @@ networks:
 ```
 
 docker-compose (自己编译镜像)
+
 ```yaml
 
 services:
@@ -126,16 +136,22 @@ networks:
 
 ```
 
-# 更新:
+# 更新
+
 ### V2.2 2025年 12月 03
+
 fix：修复 Android 部分版本名字获取异常问题。
+
 fix：修复登录失效后，无法跳转首页问题。
+
 feat：登录有效期改为 30天。
 
 ### V2.1 2024年 11月 17
+
 fix: 修复 iOS 新版本 ipa 包获取不到 icon 导致上传失败问题
 
 ### V2.0 2021年08月22日
+
 feature: 打包方式升级为 vite.
 
 feature: node 版本升级至 12.18.1
@@ -152,11 +168,8 @@ fix: 优化部分逻辑.
 
 ### 爱发布
 
-
-demo地址: https://fabu.apppills.com/
+demo地址: <https://fabu.apppills.com/>
 该平台是类似于fir.im/蒲公英类似的一个平台.可以自己部署.
-
-
 
 项目前后端分离开发:
 
@@ -185,11 +198,11 @@ demo地址: https://fabu.apppills.com/
 #### 使用docker运行（建议）
 
 > ps：请先安装docker
+
 1. 下载源码  `git clone https://github.com/rock-app/fabu.love`
 2. 执行`cd docker`
 3. 执行`docker-compose up -d --build`
-4. 打开浏览器 http://0.0.0.0:9898
-
+4. 打开浏览器 <http://0.0.0.0:9898>
 
 #### 本地运行
 
@@ -243,10 +256,7 @@ npm run start  #本地运行可以使用该命令
 ============>>end
 ```
 
-4.使用浏览器打开进入http://localhost:9898即可进入应用
-
-
-
+4.使用浏览器打开进入<http://localhost:9898即可进入应用>
 
 ### 项目配置说明
 
@@ -276,7 +286,7 @@ const common = {
     dbName: process.env.FABU_DB_NAME || "fabulove", //数据库名称
     dbHost: process.env.FABU_DB_HOST || "localhost", //数据库地址
     dbPort: process.env.FABU_DB_PORT || "27017", //数据库端口
-	
+ 
     //邮件相关配置 用于找回密码和邀请团队成员发送邮件
     emailService: process.env.FABU_EMAIL_SERVICE || "qq", 
     emailUser: process.env.FABU_EMAIL_USER || "", 
@@ -294,10 +304,6 @@ const common = {
 
 };
 ```
-
-
-
-
 
 ### 正式环境部署 nginx配置(注意请使用https部署,否则iOS会出现无法安装的问题)
 
@@ -335,4 +341,3 @@ server{
   client_max_body_size 208M; #最大上传的ipa/apk文件大小
 }
 ```
-
