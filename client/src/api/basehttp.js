@@ -1,4 +1,4 @@
-import { useRouter } from "vue-router";
+import router from '@/router/index.js'
 import TokenMgr from '../mgr/TokenMgr'
 import { ElMessage } from 'element-plus'
 import { removeUserInfo } from '@/mgr/userMgr'
@@ -97,9 +97,8 @@ export function configAxios() {
         // 清除用户信息
         TokenMgr.clearTokens()
         removeUserInfo()
-        // 登录
+        // 跳转登录页
         setTimeout(() => {
-          const router = useRouter()
           router.push('/login')
         }, 500)
         break
