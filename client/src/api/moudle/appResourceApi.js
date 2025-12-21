@@ -30,7 +30,7 @@ export function getAppVersionDetail(teamId, id, versionId) {
   return getHttp(url)
 }
 // 删除应用
-export function delectApp(teamId, appId) {
+export function deleteApp(teamId, appId) {
   let url = `api/apps/${teamId}/${appId}`
   return deleteHttp(url)
 }
@@ -52,7 +52,7 @@ export function releaseApp(teamId, id, versionId, versionCode, release) {
   return postHttp(url, body)
 }
 // 删除某个版本
-export function delectAppVersion(teamId, appId, versionId) {
+export function deleteAppVersion(teamId, appId, versionId) {
   let url = `api/apps/${teamId}/${appId}/versions/${versionId}`
   return deleteHttp(url)
 }

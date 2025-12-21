@@ -79,7 +79,7 @@
             <button class="appversion-elButton" @click="releaseApp(scope.row)"><i class="icon-ic_overview"></i></button>
             <button class="appversion-elButton" @click="clickDownLoad(scope.row)"><i class="icon-ic_download"></i></button>
             <button class="appversion-elButton" @click="clickEditor(scope.row)"><i class="icon-ic_edit"></i></button>
-            <button class="appversion-elButton" @click="clickDelect(scope.row)"><i class="icon-ic_delete"></i></button>
+            <button class="appversion-elButton" @click="clickDelete(scope.row)"><i class="icon-ic_delete"></i></button>
           </template>
         </el-table-column>
       </el-table>
@@ -206,10 +206,10 @@
         })
         window.open(href, '_blank')
       },
-      clickDelect(item) {
+      clickDelete(item) {
         this.$confirm('确认删除？')
           .then(() => {
-            AppResourceApi.delectAppVersion(this.userteam._id, this.appInfo._id, item._id).then((res) => {
+            AppResourceApi.deleteAppVersion(this.userteam._id, this.appInfo._id, item._id).then((res) => {
               this.$message.success('删除成功')
               var index = this.dataArr.indexOf(item)
               this.dataArr.splice(index, 1)

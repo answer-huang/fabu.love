@@ -5,7 +5,7 @@
         <!--v-lazy="getIconUrl()"-->
         <img class="appicon" src="../../common/assets/miniicon.png">
         <p class="appname">{{this.appInfo.appName}}</p>
-        <button class="delete button-style-border" @click="delectMiniApp">删除</button>
+        <button class="delete button-style-border" @click="deleteMiniApp">删除</button>
       </div>
     </div>
 
@@ -56,10 +56,10 @@
       getIconUrl() {
         return `${this.axios.defaults.baseURL}${this.appInfo.icon}`
       },
-      delectMiniApp(item) {
+      deleteMiniApp(item) {
         this.$confirm('确认删除？')
           .then(_ => {
-            MiniApi.delectApp(this.team._id, this.appInfo._id).then((res) => {
+            MiniApi.deleteApp(this.team._id, this.appInfo._id).then((res) => {
               this.$message.success('删除成功')
               this.router.go(-1)
             }, reject => {
