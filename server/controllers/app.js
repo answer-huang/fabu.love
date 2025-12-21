@@ -330,7 +330,8 @@ module.exports = class AppRouter {
         if (body.release) {
             await App.updateOne({ _id: app.id }, {
                 releaseVersionId: version._id,
-                releaseVersionCode: version.versionCode
+                releaseVersionCode: version.versionCode,
+                currentVersion: version.versionStr ? `${version.versionStr}(${version.versionCode})` : version.versionCode
             })
         } else {
             await App.updateOne({ _id: app.id }, {

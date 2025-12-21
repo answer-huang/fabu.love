@@ -82,7 +82,8 @@ module.exports = class UploadRouter {
     if ( result.app.autoPublish ) {
       await App.updateOne({ _id: result.app._id }, {
         releaseVersionId: result.version._id,
-        releaseVersionCode: result.version.versionCode
+        releaseVersionCode: result.version.versionCode,
+        currentVersion: result.version.versionStr ? `${result.version.versionStr}(${result.version.versionCode})` : result.version.versionCode
       });
     }
     ctx.body = responseWrapper(result);
@@ -141,7 +142,7 @@ async function parseAppAndInsertToDB(file, user, team) {
     info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
     app = new App(info)
     app.ownerId = team._id;
-    app.currentVersion = info.versionCode
+    app.currentVersion = info.versionStr ? `${info.versionStr}(${info.versionCode})` : info.versionCode
     await app.save()
     info.uploader = user.username;
     info.uploaderId = user._id;

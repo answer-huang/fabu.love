@@ -27,7 +27,7 @@
             <tr>
               <td class="appItem-info-title">当前版本:</td>
               <td>
-                <div class="appItem-info-appInfo nowrap" v-html="item.currentVersion"></div>
+                <div class="appItem-info-appInfo nowrap" v-html="getCurrentVersion(item)"></div>
               </td>
             </tr>
             </tbody>
@@ -80,6 +80,18 @@ export default {
     },
     getShortUrl(item) {
       return `${ this.axios.defaults.baseURL }${ item.shortUrl }`
+    },
+    getCurrentVersion(item) {
+      // 优先使用 currentVersion，如果不存在则使用 releaseVersionCode 作为后备
+      if (item.currentVersion) {
+        return item.currentVersion
+      }
+      // 如果 releaseVersionCode 存在，显示它
+      if (item.releaseVersionCode) {
+        return item.releaseVersionCode
+      }
+      // 如果都不存在，显示空或提示
+      return '-'
     },
     clickEditorBtn(item) {
       this.$emit('gotoAppDetail', item)
