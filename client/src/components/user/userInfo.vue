@@ -9,10 +9,17 @@
             <div class="userInfo-name-token">
                 <p class="userInfo-name">{{this.userInfo.userName}}</p>
                 <div v-show="hasApiToken" class="userInfo-apiToken-contain">
-                    <label class="userInfo-apiToken-text"> {{ apiToken }} </label>
-                    <button class="reset-button" @click="apiTokenAction" title='点击重置ApiToken'>
-                        <img style="{width: 24; height: 24px;}" src="../../common/assets/btn_redraw@2x.png">
-                    </button>
+                    <label class="userInfo-apiToken-text"> {{ maskedApiToken }} </label>
+                    <div class="userInfo-apiToken-actions">
+                        <button class="copy-button" @click="copyApiToken" title='点击复制ApiToken'>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.5 3.5H3.5C2.94772 3.5 2.5 3.94772 2.5 4.5V12.5C2.5 13.0523 2.94772 13.5 3.5 13.5H9.5C10.0523 13.5 10.5 13.0523 10.5 12.5V10.5M5.5 3.5H11.5C12.0523 3.5 12.5 3.94772 12.5 4.5V8.5M5.5 3.5C5.5 2.94772 5.94772 2.5 6.5 2.5H10.5L13.5 5.5V9.5C13.5 10.0523 13.0523 10.5 12.5 10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="reset-button" @click="apiTokenAction" title='点击重置ApiToken'>
+                            <img style="{width: 24; height: 24px;}" src="../../common/assets/btn_redraw@2x.png">
+                        </button>
+                    </div>
                 </div>
             </div>
             <div v-show="!hasApiToken">
@@ -68,6 +75,18 @@
         computed: {
             hasApiToken: function() {
                 return this.apiToken !== undefined
+            },
+            maskedApiToken: function() {
+                if (!this.apiToken) {
+                    return ''
+                }
+                // 显示前6位和后6位，中间用省略号
+                const token = this.apiToken
+                if (token.length <= 12) {
+                    // 如果 token 太短，直接显示
+                    return token
+                }
+                return token.substring(0, 6) + '...' + token.substring(token.length - 6)
             }
         },
         methods: {
@@ -101,6 +120,60 @@
                         message: error
                     })
                 })
+            },
+            copyApiToken() {
+                if (!this.apiToken) {
+                    this.$message({
+                        type: 'error',
+                        message: 'ApiToken不存在'
+                    })
+                    return
+                }
+                // 使用 Clipboard API 复制文本
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(this.apiToken).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: 'ApiToken已复制到剪贴板'
+                        })
+                    }).catch(err => {
+                        // 降级方案：使用传统方法
+                        this.fallbackCopyText(this.apiToken)
+                    })
+                } else {
+                    // 降级方案：使用传统方法
+                    this.fallbackCopyText(this.apiToken)
+                }
+            },
+            fallbackCopyText(text) {
+                const textArea = document.createElement('textarea')
+                textArea.value = text
+                textArea.style.position = 'fixed'
+                textArea.style.left = '-999999px'
+                textArea.style.top = '-999999px'
+                document.body.appendChild(textArea)
+                textArea.focus()
+                textArea.select()
+                try {
+                    const successful = document.execCommand('copy')
+                    if (successful) {
+                        this.$message({
+                            type: 'success',
+                            message: 'ApiToken已复制到剪贴板'
+                        })
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '复制失败，请手动选择文本复制'
+                        })
+                    }
+                } catch (err) {
+                    this.$message({
+                        type: 'error',
+                        message: '复制失败，请手动选择文本复制'
+                    })
+                }
+                document.body.removeChild(textArea)
             }
         }
     }
@@ -205,12 +278,40 @@
                 font-weight: 400;
                 color: rgba(170, 186, 210, 1);
                 line-height: 24px;
+                flex: 1;
+                margin-right: 8px;
+            }
+            .userInfo-apiToken-actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .copy-button {
+                height: 26px;
+                width: 26px;
+                border: none;
+                line-height: 26px;
+                background-color: rgba(0,0,0,0);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba(170, 186, 210, 1);
+                transition: color 0.2s;
+                padding: 0;
+                &:hover {
+                    color: $mainColor;
+                }
+                &:active {
+                    opacity: 0.7;
+                }
             }
             .reset-button {
                 height: 26px;
                 border: none;
                 line-height: 26px;
                 background-color: rgba(0,0,0,0);
+                cursor: pointer;
             }
 
         }
