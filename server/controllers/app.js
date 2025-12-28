@@ -199,6 +199,29 @@ module.exports = class AppRouter {
         var { teamId, id, versionId } = ctx.validatedParams;
         var app = await appInTeamAndUserIsManager(id, teamId, user._id)
         var findOne = await Version.findById(versionId)
+        
+        if (!findOne) {
+            throw new Error("版本不存在")
+        }
+
+        // 先删除文件，再删除数据库记录
+        if (findOne.downloadUrl) {
+            try {
+                const filePath = fpath.join(config.fileDir, findOne.downloadUrl)
+                // 检查文件是否存在
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath)
+                    console.log(`已删除文件: ${filePath}`)
+                } else {
+                    console.warn(`文件不存在，跳过删除: ${filePath}`)
+                }
+            } catch(err) {
+                console.error(`删除文件失败: ${findOne.downloadUrl}`, err)
+                // 即使文件删除失败，也继续删除数据库记录
+            }
+        }
+
+        // 删除数据库记录
         var result = await Version.deleteOne({ _id: versionId })
         if (versionId == app.releaseVersionId) {
             await App.updateOne({ _id: app._id }, {
@@ -211,12 +234,6 @@ module.exports = class AppRouter {
                 grayReleaseVersionId: null,
                 grayStrategy: null
             })
-        }
-        try {
-            // 删除对应版本的文件
-            fs.unlinkSync(fpath.join(config.fileDir, findOne.downloadUrl))
-        } catch(err) {
-            console.error(err)
         }
         ctx.body = responseWrapper(true, "版本已删除")
     }
@@ -330,7 +347,8 @@ module.exports = class AppRouter {
         if (body.release) {
             await App.updateOne({ _id: app.id }, {
                 releaseVersionId: version._id,
-                releaseVersionCode: version.versionCode
+                releaseVersionCode: version.versionCode,
+                currentVersion: version.versionStr ? `${version.versionStr}(${version.versionCode})` : version.versionCode
             })
         } else {
             await App.updateOne({ _id: app.id }, {

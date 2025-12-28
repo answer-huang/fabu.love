@@ -142,10 +142,10 @@ export default {
       },
       clickPreview() {
       },
-      delectApp(item) {
+      deleteApp(item) {
         this.$confirm('确认删除？')
           .then(_ => {
-            AppResourceApi.delectApp(this.currentTeam._id, item._id).then((res) => {
+            AppResourceApi.deleteApp(this.currentTeam._id, item._id).then((res) => {
               this.loadAppList()
             }, reject => {
               this.$message.error(reject)

@@ -20,7 +20,7 @@
               @change="referenceUpload"
               type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer">
             <button class="preview button-style-border" @click="clickPreviewBtn">预览</button>
-            <button class="delete button-style-border" @click="delectApp">删除</button>
+            <button class="delete button-style-border" @click="deleteApp">删除</button>
 
             <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 68px;left: 36px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
 
@@ -92,10 +92,10 @@
           this.showUploadView = true
         }
       },
-      delectApp(item) {
+      deleteApp(item) {
         this.$confirm('确认删除？')
           .then(_ => {
-            AppResourceApi.delectApp(this.team._id, this.appInfo._id).then((res) => {
+            AppResourceApi.deleteApp(this.team._id, this.appInfo._id).then((res) => {
               this.$message.success('删除成功')
               this.router.go(-1)
             }, reject => {

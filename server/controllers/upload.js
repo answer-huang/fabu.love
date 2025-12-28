@@ -82,7 +82,8 @@ module.exports = class UploadRouter {
     if ( result.app.autoPublish ) {
       await App.updateOne({ _id: result.app._id }, {
         releaseVersionId: result.version._id,
-        releaseVersionCode: result.version.versionCode
+        releaseVersionCode: result.version.versionCode,
+        currentVersion: result.version.versionStr ? `${result.version.versionStr}(${result.version.versionCode})` : result.version.versionCode
       });
     }
     ctx.body = responseWrapper(result);
@@ -141,7 +142,7 @@ async function parseAppAndInsertToDB(file, user, team) {
     info.shortUrl = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
     app = new App(info)
     app.ownerId = team._id;
-    app.currentVersion = info.versionCode
+    app.currentVersion = info.versionStr ? `${info.versionStr}(${info.versionCode})` : info.versionCode
     await app.save()
     info.uploader = user.username;
     info.uploaderId = user._id;
@@ -353,25 +354,57 @@ function extractAPKIconV2(filepath, guid, team) {
   let realPath = path.join(team.id, 'icon', '/{0}_a.png'.format(guid));
 
   return new Promise(async (resolve, reject) => {
-    const parser = new AppInfoParser(filepath) // or xxx.ipa
-    const parserResult = await parser.parse()
-    if ( parserResult.icon ) {
-      // 可能会包含 xml 文件
-      let largestIcon = parserResult.application.icon.filter(name => name.endsWith('.png') || name.endsWith('.webp')).pop()
+    try {
+      const parser = new AppInfoParser(filepath) // or xxx.ipa
+      const parserResult = await parser.parse()
+      
+      // 检查是否有图标信息
+      if ( parserResult.icon && parserResult.application && parserResult.application.icon && Array.isArray(parserResult.application.icon) ) {
+        // 可能会包含 xml 文件，过滤出 PNG 或 WebP 格式的图标
+        let iconList = parserResult.application.icon.filter(name => name && (name.endsWith('.png') || name.endsWith('.webp')))
+        let largestIcon = iconList.length > 0 ? iconList.pop() : null
 
-      const reader = await ApkReader.open(filepath)
-      const png = await reader.readContent(largestIcon)
+        // 如果找到了有效的图标文件，尝试读取
+        if ( largestIcon ) {
+          try {
+            const reader = await ApkReader.open(filepath)
+            const png = await reader.readContent(largestIcon)
 
+            await createFolderIfNeeded(iconDir);
+            let tempOut = path.join(uploadDir, realPath);
+
+            fs.writeFile(tempOut, png, (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve({ 'success': true, fileName: realPath });
+              }
+            })
+            return;
+          } catch (iconError) {
+            console.log('Failed to read icon from APK:', iconError);
+            // 如果读取图标失败，继续使用文本图标作为后备方案
+          }
+        }
+      }
+      
+      // 如果没有找到有效图标，使用文本图标作为后备方案
+      let appLabel = 'Unknown App';
+      if (parserResult.application && parserResult.application.label) {
+        if (Array.isArray(parserResult.application.label) && parserResult.application.label.length > 0) {
+          appLabel = parserResult.application.label[0];
+        } else if (typeof parserResult.application.label === 'string') {
+          appLabel = parserResult.application.label;
+        }
+      }
+      
       await createFolderIfNeeded(iconDir);
       let tempOut = path.join(uploadDir, realPath);
-
-      fs.writeFile(tempOut, png, (err) => {
-        resolve({ 'success': true, fileName: realPath });
-      })
-    } else {
-      generatePngWithText(realPath, parserResult.application.label.pop()).then(() => {
-        resolve({ 'success': true, fileName: realPath });
-      })
+      await generatePngWithText(tempOut, appLabel);
+      resolve({ 'success': true, fileName: realPath });
+    } catch (error) {
+      console.error('Error extracting APK icon:', error);
+      reject(error);
     }
   })
 }
