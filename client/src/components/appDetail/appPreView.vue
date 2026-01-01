@@ -470,8 +470,7 @@
 
   .modal_text {
     box-sizing: border-box;
-    width: 100%;
-    padding: 10px 60px 20px 20px;
+    padding: 10px 70px 20px 20px;
     color: #f0f0f0;
     font-size: 16px;
     font-weight: 500;
