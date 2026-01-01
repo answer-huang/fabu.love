@@ -21,6 +21,16 @@
           <el-radio v-model="showHistory" label="是">展示</el-radio>
           <el-radio v-model="showHistory" label="否">不展示</el-radio>
         </el-form-item>
+        <el-form-item label="合并应用">
+          <el-select v-model="mergedId" placeholder="请选择要合并的应用" clearable class="merge-select">
+            <el-option
+              v-for="app in availableApps"
+              :key="app._id"
+              :label="getAppLabel(app)"
+              :value="app._id">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
 
       <button type="button" class="bottomBtn button-style-border" @click="clickSure">立即生效</button>
@@ -43,18 +53,47 @@
         installType: '公开',
         pulishType: '手动发布',
         installPwd: '',
-        showHistory: '是'
+        showHistory: '是',
+        mergedId: '',
+        availableApps: []
       }
     },
     created() {
+      this.loadAppList()
     },
     mounted() {
       this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
       this.pulishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
       this.showHistory = this.appInfo.showHistory === true ? '是' : '否'
       this.installPwd = this.appInfo.installPwd
+      this.mergedId = this.appInfo.mergedId || ''
     },
     methods: {
+      getAppLabel(app) {
+        const platformText = app.platform === 'ios' ? 'iOS' : app.platform === 'android' ? 'Android' : app.platform || ''
+        return `${app.appName} (${platformText})`
+      },
+      loadAppList() {
+        AppResourceApi.getAppList(getUserTeam()._id).then((res) => {
+          if (res.success && res.data) {
+            // 过滤掉当前应用
+            let apps = res.data.filter(app => app._id !== this.appInfo._id)
+            // 按照相同 bundleId 优先排序（相同 bundleId 的应用排在前面）
+            apps.sort((a, b) => {
+              if (a.bundleId === this.appInfo.bundleId && b.bundleId !== this.appInfo.bundleId) {
+                return -1
+              }
+              if (a.bundleId !== this.appInfo.bundleId && b.bundleId === this.appInfo.bundleId) {
+                return 1
+              }
+              return 0
+            })
+            this.availableApps = apps
+          }
+        }, reject => {
+          console.error('获取应用列表失败', reject)
+        })
+      },
       clickSure() {
         if (this.installType === '密码安装' && this.installPwd === '') {
             this.$message.error('密码不能为空')
@@ -66,6 +105,13 @@
           'installPwd': this.installPwd,
           'autoPublish': this.pulishType === '手动发布' ? 0 : 1,
           'showHistory': this.showHistory === '是' ? 1 : 0,
+        }
+        // 如果选择了合并应用，添加 mergedId
+        if (this.mergedId) {
+          body.mergedId = this.mergedId
+        } else {
+          // 如果清空了选择，也需要更新 mergedId 为空
+          body.mergedId = ''
         }
         AppResourceApi.updateAppSetting(getUserTeam()._id, this.appInfo._id, body).then((res) => {
             if (res.success) {
@@ -124,6 +170,9 @@
   }
   .appsetting-wrapper .content .el-form .el-form-item .installtype {
     width: 150px;
+  }
+  .appsetting-wrapper .content .el-form .el-form-item .merge-select {
+    width: 300px;
   }
   .content .bottomBtn{
     width: 96px;

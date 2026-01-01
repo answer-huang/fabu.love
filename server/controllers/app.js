@@ -56,7 +56,8 @@ var appProfile = {
     'shortUrl': 'string', //应用短连接
     'installWithPwd': 'boolean', //应用安装是否需要密码
     'installPwd': 'string', //应用安装的密码
-    'autoPublish': 'boolean' //新版本自动发布
+    'autoPublish': 'boolean', //新版本自动发布
+    'mergedId': 'string' //被合并的应用id
 }
 
 module.exports = class AppRouter {
