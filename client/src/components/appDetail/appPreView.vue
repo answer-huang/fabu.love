@@ -25,15 +25,19 @@
             <img class="appicon" :src="getIconUrl()" alt="">
             <p class="title">{{this.appBaseData.appName}}</p>
             <div class="info">
-              <p v-if="this.appVersionInfo.versionStr" class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
+              <p v-if="this.appVersionInfo.versionStr" class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</p>
+              <p>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</p>
             </div>
-            <p class="date">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
+            <p class="date">发布日期： {{ this.appVersionInfo.createDateStr }} </p>
             <div v-if="showPasswordInput">
               <el-input v-model="pwd" type="password" placeholder="请输入密码" class="pwd"></el-input>
               <el-button @click="clickSure" type="primary" round class="downloadBtn">确定</el-button>
             </div>
 
-            <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round><i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>    下载安装</el-button>
+            <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round>
+              <i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>
+              下载安装
+            </el-button>
           </div>
         </div>
 
@@ -82,6 +86,7 @@
     computed: {
       isIos() {
         var u = navigator.userAgent
+        //Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
         return isiOS
       },
@@ -150,15 +155,51 @@
           let releaseDate = new Date(this.appVersionInfo.uploadAt)
           this.downloadUrl = `${window.origin}${this.$route.fullPath}`
           this.platformStr = res.data.app.platform
-          this.appVersionInfo.creatDateStr = releaseDate.toFormat()
+          this.appVersionInfo.createDateStr = releaseDate.toFormat()
           if (this.appBaseData.installPwd === 1) {
             this.installWithPwd = true
           } else {
             this.installWithPwd = false
           }
 
+          // 检查平台匹配和合并应用跳转
+          this.checkPlatformAndRedirect()
+
         }, reject => {
           this.$message.error('服务器错误')
+        })
+      },
+      checkPlatformAndRedirect() {
+        // 如果 mergedId 未配置，不做任何操作
+        if (!this.appBaseData.mergedId) {
+          return
+        }
+
+        if(!this.isIos && !this.isAndroid) {
+          return
+        }
+
+        // 如果当前 app 是 iOS 平台，但是 this.isIos 是 false
+        if (this.appBaseData.platform === 'ios' && !this.isIos) {
+          this.redirectToMergedApp()
+          return
+        }
+
+        // 如果当前 app 是 Android 平台，但是 this.isAndroid 是 false
+        if (this.appBaseData.platform === 'android' && !this.isAndroid) {
+          this.redirectToMergedApp()
+          return
+        }
+      },
+      redirectToMergedApp() {
+        // 获取 mergedId 对应 app 的信息
+        AppResourceApi.getAppById(this.appBaseData.mergedId).then((res) => {
+          if (res.success && res.data && res.data.shortUrl) {
+            // 跳转到对应的 app
+            this.$router.replace(`/${res.data.shortUrl}`)
+          }
+        }, reject => {
+          console.error('获取合并应用信息失败', reject)
         })
       },
       getIconUrl() {

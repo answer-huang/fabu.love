@@ -424,6 +424,19 @@ module.exports = class AppRouter {
         }
         // }
 
+    @request('get', '/api/app/byId/{appId}')
+    @summary("通过应用ID获取应用信息（用于合并应用跳转）")
+    @tag
+    @path({ appId: { type: 'string', require: true } })
+    static async getAppById(ctx, next) {
+        var { appId } = ctx.validatedParams
+        var app = await App.findById(appId)
+        if (!app) {
+            throw new Error("应用不存在")
+        }
+        ctx.body = responseWrapper({ shortUrl: app.shortUrl })
+    }
+
     @request('get', '/api/app/{appShortUrl}')
     @summary("通过短链接获取应用最新版本")
     @tag
