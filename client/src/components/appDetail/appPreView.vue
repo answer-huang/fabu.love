@@ -196,7 +196,7 @@
         AppResourceApi.getAppById(this.appBaseData.mergedId).then((res) => {
           if (res.success && res.data && res.data.shortUrl) {
             // 跳转到对应的 app
-            this.$router.replace(`/${res.data.shortUrl}`)
+            window.location.href = res.data.shortUrl
           }
         }, reject => {
           console.error('获取合并应用信息失败', reject)
