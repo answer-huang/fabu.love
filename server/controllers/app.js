@@ -122,6 +122,24 @@ module.exports = class AppRouter {
         if (!app) {
             throw new Error("应用不存在或您没有权限查询该应用")
         }
+        // 先查出所有版本，逐个删除真实文件
+        const versions = await Version.find({ appId: app.id })
+        for (const version of versions) {
+            if (version.downloadUrl) {
+                try {
+                    const filePath = fpath.join(config.fileDir, version.downloadUrl)
+                    if (fs.existsSync(filePath)) {
+                        fs.unlinkSync(filePath)
+                        console.log(`已删除文件: ${filePath}`)
+                    } else {
+                        console.warn(`文件不存在，跳过删除: ${filePath}`)
+                    }
+                } catch (err) {
+                    console.error(`删除文件失败: ${version.downloadUrl}`, err)
+                    // 即使文件删除失败，也继续删除数据库记录
+                }
+            }
+        }
         await Version.deleteMany({ appId: app.id })
         await App.deleteOne({ _id: app.id })
         ctx.body = responseWrapper(true, "应用已删除")

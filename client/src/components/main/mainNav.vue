@@ -21,6 +21,10 @@
             <i class="icon-ic_mnggp"></i>
             <template #title>团队管理</template>
           </el-menu-item>
+          <el-menu-item index="数据清理" @click="clickSubItem">
+            <i class="icon-ic_mnggp"></i>
+            <template #title>数据清理</template>
+          </el-menu-item>
         </div>
 
         <div v-show="this.activeIndex === '应用概述'">
@@ -105,6 +109,9 @@ import { useRoute, useRouter } from "vue-router";
       if (this.route.fullPath === '/members') {
         this.activeIndex = '团队管理'
       }
+      if (this.route.fullPath === '/data-cleanup') {
+        this.activeIndex = '数据清理'
+      }
       if (this.route.fullPath === '/miniAppList') {
         this.activeIndex = '小程序列表'
       }
@@ -132,6 +139,9 @@ import { useRoute, useRouter } from "vue-router";
         }
         if (data.index === '团队管理') {
           this.router.push('/members')
+        }
+        if (data.index === '数据清理') {
+          this.router.push('/data-cleanup')
         }
         if (data.index === 'API文档') {
           let href = `${this.axios.defaults.baseURL}api/swagger`
