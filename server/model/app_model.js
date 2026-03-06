@@ -81,6 +81,9 @@ var appSchema = new Schema({
         type: Boolean,
         default: true
     },
+    mergedId: { //被合并的应用id
+        type: String
+    },
 })
 
 // appSchema.virtual('versions').get(function () {     return Version.find })
