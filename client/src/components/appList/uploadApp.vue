@@ -49,6 +49,7 @@
         var data = new FormData()
         data.append('file', this.appFile[0])
         var config = {
+          timeout: 300000,
           onUploadProgress: function(progressEvent) {
             var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
               _this.$nextTick(() => {
