@@ -3,10 +3,10 @@
       <img class="appicon" :src="getIconUrl()" alt="">
       <p class="title">{{this.appBaseData.appName}}</p>
       <div class="info">
-        <p class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</p><span>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</span>
-
+        <div class="desc">版本：{{this.appVersionInfo.versionStr}}({{this.appVersionInfo.versionCode}})</div>
+        <div>大小：{{(this.appVersionInfo.size/1024/1024).toFixed(1)}}M</div>
       </div>
-      <p class="info">发布日期： {{ this.appVersionInfo.creatDateStr }} </p>
+      <p class="info">发布日期： {{ this.appVersionInfo.createDateStr }} </p>
       <div v-if="!showDownLoadBtn">
         <div>
           <el-input v-model="pwd" type="password" placeholder="请输入密码" class="pwd"></el-input>
@@ -16,7 +16,10 @@
         </div>
       </div>
 
-      <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round><i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>    下载安装</el-button>
+      <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round>
+        <i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>
+        下载安装
+      </el-button>
     </div>
 </template>
 

@@ -43,6 +43,7 @@ export default ({ command, mode }) => {
     },
     // define: define,
     server: {
+      host: true, // 允许通过局域网 IP 访问
       // 代理
       proxy,
     },

@@ -41,6 +41,12 @@ export function getAppInfoByShortUrl(appShortUrl) {
   return getHttp(url)
 }
 
+// 通过应用ID获取应用信息（用于合并应用跳转）
+export function getAppById(appId) {
+  let url = `api/app/byId/${appId}`
+  return getHttp(url)
+}
+
 // 发布应用
 export function releaseApp(teamId, id, versionId, versionCode, release) {
   let body = {
