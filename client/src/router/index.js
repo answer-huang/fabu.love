@@ -34,6 +34,11 @@ let routes = [
         component: () => import('../components/miniApplication/miniAppList.vue')
       },
       {
+        path: '/data-cleanup',
+        name: 'DataCleanup',
+        component: () => import('../components/storage/dataCleanup.vue')
+      },
+      {
         path: '/miniApp/:appId',
         name: 'MiniAppDetail',
         component: () => import('../components/miniApplication/miniAppDetail.vue')
