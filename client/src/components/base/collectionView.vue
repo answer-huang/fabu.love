@@ -2,7 +2,7 @@
   <div class="collectionView-wrapper">
     <ul class="collectionView-wrapper-ul">
       <li v-for="(item, index) in this.dataArr" :key="index" class="itemWrapper">
-        <span :class="item.platform === 'ios' ? 'appItem-platform-ios':'appItem-platform-android'"
+        <span :class="getPlatformTagClass(item.platform)"
               class="appItem-platform"></span>
         <img class="appItem-icon" v-if="item.icon" :src="getIcon(item)" @click="gotoAppDetail(item)">
 
@@ -74,6 +74,15 @@ export default {
   methods: {
     gotoAppDetail(item) {
       this.$emit('gotoAppDetail', item)
+    },
+    getPlatformTagClass(platform) {
+      if (platform === 'ios') {
+        return 'appItem-platform-ios'
+      } else if (platform === 'harmony') {
+        return 'appItem-platform-harmony'
+      } else {
+        return 'appItem-platform-android'
+      }
     },
     getIcon(item) {
       return `${ this.axios.defaults.baseURL }${ item.icon }`
@@ -159,6 +168,10 @@ export default {
 
 .collectionView-wrapper .itemWrapper .appItem-platform-android {
   background-image: url("../../common/assets/tag_android.png");
+}
+
+.collectionView-wrapper .itemWrapper .appItem-platform-harmony {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='52' height='38' viewBox='0 0 52 38'><path d='M0 0h46a6 6 0 0 1 6 6v26a6 6 0 0 1-6 6H0V0z' fill='%23007DFF'/><text x='24' y='23' font-family='sans-serif' font-size='8' font-weight='bold' fill='white' text-anchor='middle'>Harmony</text></svg>");
 }
 
 .itemWrapper .appItem-icon {

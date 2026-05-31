@@ -7,7 +7,7 @@
           <div class="appType-platform-wrapper">
             <div class="appType" v-show="this.appInfo.appLevel" v-html="getAppType()"></div>
             <div class="platform">
-              <i :class="this.appInfo.platform === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i><span v-html="`  适用于${this.appInfo.platform}`"></span>
+              <i :class="getPlatformIconClass(this.appInfo.platform)"></i><span v-html="`  适用于${getPlatformName(this.appInfo.platform)}`"></span>
             </div>
           </div>
           <div class="rightwrapper" style="z-index: 1">
@@ -16,7 +16,7 @@
             <input
               title="上传应用"
               ref="referenceUpload"
-              accept=".ipa, .apk"
+              accept=".ipa, .apk, .hap"
               @change="referenceUpload"
               type="file" style="position: absolute;top: 36px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer">
             <button class="preview button-style-border" @click="clickPreviewBtn">预览</button>
@@ -70,6 +70,25 @@
           params: { 'id': this.appInfo.shortUrl }
         })
         window.open(href, '_blank')
+      },
+      getPlatformIconClass(platform) {
+        if (platform === 'ios') {
+          return 'icon-ic_ios'
+        } else if (platform === 'harmony') {
+          return 'platformIcon-harmony'
+        } else {
+          return 'icon-ic_andr'
+        }
+      },
+      getPlatformName(platform) {
+        if (platform === 'ios') {
+          return 'iOS'
+        } else if (platform === 'harmony') {
+          return 'HarmonyOS'
+        } else if (platform === 'android') {
+          return 'Android'
+        }
+        return platform
       },
       getIconUrl() {
         return `${this.axios.defaults.baseURL}${this.appInfo.icon}`

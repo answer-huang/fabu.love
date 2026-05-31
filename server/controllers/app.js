@@ -498,11 +498,7 @@ module.exports = class AppRouter {
 
         if (!version) {
             ctx.body = responseWrapper(false, "当前没有可用版本可供下载")
-        } else {
-            ctx.body = responseWrapper({
-                app: app,
-                version: version
-            })
+            return
         }
 
         // 查出历史版本,前50条

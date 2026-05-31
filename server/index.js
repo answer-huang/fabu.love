@@ -17,7 +17,6 @@ const app = new Koa()
 
 import Varify from './helper/varify'
 import Helper from './helper/MiddleHelper'
-import { isNull, isUndefined } from 'util';
 
 var helper = new Helper()
 
@@ -51,12 +50,12 @@ var middleware = koajwt({ secret: config.secret, debug: true }).unless({
 
 app.use(helper.skip(middleware).if((ctx) => {
     var key = ctx.request.headers['apikey']
-    return !isUndefined(key)
+    return key !== undefined
 }))
 
 app.use(async(ctx, next) => {
     var key = ctx.request.headers['apikey']
-    if (!isUndefined(key)) {
+    if (key !== undefined) {
         var user = await Varify.auth(key).catch(error => {
             throw error
         })

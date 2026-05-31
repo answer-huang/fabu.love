@@ -35,7 +35,7 @@
             </div>
 
             <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round>
-              <i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>
+              <i :class="getPlatformIconClass(this.platformStr)"></i>
               下载安装
             </el-button>
           </div>
@@ -46,7 +46,7 @@
           <img class="mobieImg" src="../../common/assets/ic_mobilphone.png">
           <vue-qr class="qrcodeImg" :text="downloadUrl" :margin="20"></vue-qr>
           <p class="codetips">请扫描二维码下载APP</p>
-          <p class="platform">适用于{{this.platformStr}}系统</p>
+          <p class="platform">适用于{{getPlatformName(this.platformStr)}}系统</p>
         </div>
 
         <div v-if="history.length !== 0">
@@ -95,6 +95,10 @@
         var isAndroid = !!(u.match(/(Android)\s+([\d.]+)/))
         return isAndroid
       },
+      isHarmony() {
+        var u = navigator.userAgent
+        return /ArkWeb/i.test(u) || /HarmonyOS/i.test(u)
+      },
       showDownLoadBtn() { // mac端不显示，密码安装且密码不正确时不显示
         var p = navigator.platform
         if (p.indexOf('Mac') === 0) {
@@ -118,7 +122,7 @@
       this.getAppInfo(this.$route.params.id)
 
       // 判断是否是手机设备
-      if (this.isIos || this.isAndroid) {
+      if (this.isIos || this.isAndroid || this.isHarmony) {
         this.isPhone = true
       } else {
         this.isPhone = false
@@ -175,18 +179,24 @@
           return
         }
 
-        if(!this.isIos && !this.isAndroid) {
+        if(!this.isIos && !this.isAndroid && !this.isHarmony) {
           return
         }
 
-        // 如果当前 app 是 iOS 平台，但是 this.isIos 是 false
-        if (this.appBaseData.platform === 'ios' && !this.isIos) {
+        // 如果当前设备是 iOS，但当前应用不是 iOS
+        if (this.isIos && this.appBaseData.platform !== 'ios') {
           this.redirectToMergedApp()
           return
         }
 
-        // 如果当前 app 是 Android 平台，但是 this.isAndroid 是 false
-        if (this.appBaseData.platform === 'android' && !this.isAndroid) {
+        // 如果当前设备是 HarmonyOS，但当前应用不是 harmony
+        if (this.isHarmony && this.appBaseData.platform !== 'harmony') {
+          this.redirectToMergedApp()
+          return
+        }
+
+        // 如果当前设备是 Android，且当前应用不是 android
+        if (this.isAndroid && !this.isHarmony && this.appBaseData.platform !== 'android') {
           this.redirectToMergedApp()
           return
         }
@@ -204,6 +214,25 @@
       },
       getIconUrl() {
         return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
+      },
+      getPlatformIconClass(platform) {
+        if (platform === 'ios') {
+          return 'icon-ic_ios'
+        } else if (platform === 'harmony') {
+          return 'platformIcon-harmony'
+        } else {
+          return 'icon-ic_andr'
+        }
+      },
+      getPlatformName(platform) {
+        if (platform === 'ios') {
+          return 'iOS'
+        } else if (platform === 'harmony') {
+          return 'HarmonyOS'
+        } else if (platform === 'android') {
+          return 'Android'
+        }
+        return platform
       },
 
       historyClickDownLoadBtn(item) {

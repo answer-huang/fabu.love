@@ -41,7 +41,7 @@ const uploadPrefix = 'upload';
 
 function createFolderIfNeeded(path) {
   if ( !fs.existsSync(path) ) {
-    fs.mkdirSync(path, { recursive: true });
+    return mkdirp(path);
   }
 
   return Promise.resolve();
@@ -636,3 +636,6 @@ String.prototype.format = function () {
     return args[i];
   });
 };
+
+module.exports.parseHap = parseHap;
+module.exports.extractHapIcon = extractHapIcon;

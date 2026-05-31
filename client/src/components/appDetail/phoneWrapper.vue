@@ -17,7 +17,7 @@
       </div>
 
       <el-button v-if="showDownLoadBtn" @click="clickDownLoadBtn" class="downloadBtn" type="primary" round>
-        <i :class="this.platformStr === 'ios' ? 'icon-ic_ios':'icon-ic_andr'"></i>
+        <i :class="getPlatformIconClass(this.platformStr)"></i>
         下载安装
       </el-button>
     </div>
@@ -52,6 +52,15 @@
     },
     created() {},
     methods: {
+      getPlatformIconClass(platform) {
+        if (platform === 'ios') {
+          return 'icon-ic_ios'
+        } else if (platform === 'harmony') {
+          return 'platformIcon-harmony'
+        } else {
+          return 'icon-ic_andr'
+        }
+      },
       getIconUrl() {
         return `${this.axios.defaults.baseURL}${this.appBaseData.icon}`
       },

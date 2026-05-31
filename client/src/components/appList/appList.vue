@@ -10,7 +10,7 @@
           alt=""
           title="上传应用"
           ref="referenceUpload"
-          accept=".ipa, .apk"
+          accept=".ipa, .apk, .hap"
           @change="referenceUpload"
           type="file"
           style="position: absolute;top: 0px;left: 0px;width: 144px;height: 48px;opacity: 0;cursor:pointer;">
@@ -23,6 +23,9 @@
           </div>
           <div class="platform-android" :class="getActiveClass('android')" @click="clickAndroidPlatform">
             <span class="platformImg icon-ic_andr"></span>
+          </div>
+          <div class="platform-harmony" :class="getActiveClass('harmony')" @click="clickHarmonyPlatform">
+            <span class="platformImg platformImg-harmony"></span>
           </div>
         </div>
         <div class="search-wrapper">
@@ -120,6 +123,13 @@ export default {
           this.currentPlatform = ''
         } else {
           this.currentPlatform = 'android'
+        }
+      },
+      clickHarmonyPlatform() {
+        if (this.currentPlatform === 'harmony') {
+          this.currentPlatform = ''
+        } else {
+          this.currentPlatform = 'harmony'
         }
       },
       getActiveClass(flag) {
@@ -275,7 +285,7 @@ export default {
 
   .applist-header .platform-wrapper {
     display: inline-block;
-    width: 144px;
+    width: 216px;
     height: 48px;
     border-radius: 24px;
     overflow: hidden;
@@ -299,6 +309,25 @@ export default {
     width: 72px;
     height: 100%;
     text-align: center;
+    border-right: solid 1px $mainColor;
+    box-sizing: border-box;
+    vertical-align: top;
+  }
+  .applist-header .platform-wrapper .platform-harmony {
+    display: inline-block;
+    width: 72px;
+    height: 100%;
+    text-align: center;
+    vertical-align: top;
+  }
+  .platformImg-harmony {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    margin-top: 11px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236477f2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='10' r='6'/><line x1='5' y1='20' x2='19' y2='20'/></svg>");
+    background-size: contain;
+    background-repeat: no-repeat;
   }
   .platformImg {
     line-height: 48px;

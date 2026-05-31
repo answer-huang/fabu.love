@@ -6,6 +6,7 @@ class QueryParam {
     if (props.platform !== '') {
       if (props.platform === '1') this.platform = 'android'
       else if (props.platform === '2') this.platform = 'ios'
+      else if (props.platform === '3') this.platform = 'harmony'
     }
     if (props.appId !== '') this.appId = props.appId
     if (props.appName !== '') this.appName = props.appName
