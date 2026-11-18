@@ -54,4 +54,30 @@
     color: $mainColor;
     margin-top: 10px;
   }
+
+  @media screen and (max-width: 768px) {
+    .empeyapp-wrapper .arrow {
+      display: none;
+    }
+
+    .empeyapp-wrapper .empty-wrapper {
+      position: relative;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      left: auto;
+      top: 48px;
+      margin: 0 auto;
+    }
+
+    .empeyapp-wrapper .empty-wrapper img {
+      max-width: 180px;
+      height: auto;
+    }
+
+    .empeyapp-wrapper .empty-wrapper p {
+      font-size: 14px;
+    }
+  }
 </style>

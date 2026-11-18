@@ -1,6 +1,16 @@
 <template xmlns:v-popover="">
   <div class="headernav-wrapper">
     <div class="leftWrapper">
+      <button
+        class="mobile-menu-btn"
+        type="button"
+        aria-label="打开导航菜单"
+        @click="toggleMobileMenu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <!--团队，切换团队-->
       <div class="team">
         <el-popover
@@ -163,8 +173,11 @@ import { useRoute, useRouter } from "vue-router";
         }, reject => {
         })
       },
+      toggleMobileMenu() {
+        this.bus.emit('toggleMobileMenu')
+      },
       clickUserIcon() {
-        this.userHover = true
+        this.userHover = !this.userHover
       },
       userInfoHovered() {
         this.userHover = true
@@ -234,6 +247,9 @@ import { useRoute, useRouter } from "vue-router";
   @use "../../common/scss/base" as *;
 
   .headernav-wrapper {
+  }
+  .headernav-wrapper .mobile-menu-btn {
+    display: none;
   }
   .el-popover {
     top: 60px !important;
@@ -378,5 +394,97 @@ import { useRoute, useRouter } from "vue-router";
   }
   .headernav-wrapper .rightWrapper .userInfoSub:hover {
     background-color: #eee;
+  }
+
+  @media screen and (max-width: 768px) {
+    .el-popover {
+      top: 50px !important;
+      left: 12px !important;
+    }
+
+    .headernav-wrapper .leftWrapper {
+      align-items: center;
+      height: 54px;
+    }
+
+    .headernav-wrapper .mobile-menu-btn {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      width: 34px;
+      height: 34px;
+      margin-right: 4px;
+      padding: 0;
+      border: none;
+      border-radius: 6px;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    .headernav-wrapper .mobile-menu-btn span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: 1px;
+      background-color: $mainTitleColor;
+    }
+
+    .headernav-wrapper .leftWrapper .team .teamBtn {
+      margin-top: 0;
+      padding: 0 6px;
+      height: 38px;
+      line-height: 38px;
+      font-size: 16px;
+      max-width: 160px;
+    }
+
+    .headernav-wrapper .leftWrapper .team .teamBtn span {
+      height: 38px;
+      line-height: 38px;
+    }
+
+    .headernav-wrapper .leftWrapper .detail p {
+      height: 54px;
+      line-height: 54px;
+      font-size: 15px;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .headernav-wrapper .rightWrapper {
+      height: 54px;
+    }
+
+    .headernav-wrapper .rightWrapper .item {
+      margin-top: 10px;
+      margin-right: 8px;
+    }
+
+    .headernav-wrapper .rightWrapper .userIcon {
+      width: 26px;
+      height: 26px;
+      margin-left: 8px;
+      margin-top: 14px;
+    }
+
+    .headernav-wrapper .rightWrapper p {
+      margin-top: 15px;
+      margin-right: 8px;
+      margin-left: 4px;
+      max-width: 80px;
+      font-size: 13px;
+    }
+
+    .headernav-wrapper .rightWrapper .userInfoSubWrapper {
+      top: 54px;
+      left: auto;
+      right: 0;
+      min-width: 110px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
   }
 </style>

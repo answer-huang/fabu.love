@@ -1,15 +1,16 @@
 <template>
   <div class="teamMgr">
     <div
+      class="teamMgr-upload-shadow"
       style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;right: 72px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
     <el-button class="uploadWrapper button-style-main" @click="createTeam">
       <img style="width: 12px; height: 12px;" src="../../common/assets/ic_add@2x.png">
       <label>新建团队</label>
     </el-button>
     <div class="teamMgr-header">
-      <div>
-        <div>
-          <label>{{ teamName }}</label>
+      <div class="teamMgr-header-inner">
+        <div class="teamMgr-title-row">
+          <label class="teamMgr-teamName">{{ teamName }}</label>
           <img v-show="isOwner" class="teamMgr-edit" src="../../common/assets/ic_morecz.png" @click="onShowMenu"/>
           <!--          <context-menu :show="showMenu" :options="optionsComponent">-->
           <!--            <context-menu-item label="编辑团队名称" @click="editAction"/>-->
@@ -35,7 +36,7 @@
         <div class="teamMgr-group-bottom"></div>
       </div>
     </div>
-    <el-dialog title="邀请成员" v-model="isShowInvite" width="30%" center>
+    <el-dialog class="team-dialog" title="邀请成员" v-model="isShowInvite" width="30%" center>
       <el-input placeholder="多个邮箱使用空格分开" :rows="10" type="textarea" v-model="invitedEmails">
       </el-input>
       <template #footer>
@@ -46,7 +47,7 @@
       </template>
 
     </el-dialog>
-    <el-dialog title="修改团队名称" v-model="editing" width="30%" center>
+    <el-dialog class="team-dialog" title="修改团队名称" v-model="editing" width="30%" center>
       <el-input placeholder="请输入新的团队名称" type="text" v-focus="editing" :focus="editing" v-model="editName">
       </el-input>
       <template #footer>
@@ -56,7 +57,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog title="提示" v-model="dialogVisible" width="30%">
+    <el-dialog class="team-dialog" title="提示" v-model="dialogVisible" width="30%">
       <span>{{ message }}</span>
       <template #footer>
         <div>
@@ -67,7 +68,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog title="提示" v-model="dissolveShow" width="30%">
+    <el-dialog class="team-dialog" title="提示" v-model="dissolveShow" width="30%">
       <span>确定要解散该团队吗？</span>
       <template #footer>
         <div class="dialog-footer">
@@ -76,7 +77,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog title="创建团队" v-model="createTeamVisible">
+    <el-dialog class="team-dialog" title="创建团队" v-model="createTeamVisible">
       <el-form :model="form">
         <el-form-item label="团队名称">
           <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -496,5 +497,112 @@ export default {
 
 .menu-item {
   color: #ff001f;
+}
+
+@media screen and (max-width: 768px) {
+  .teamMgr {
+    margin-top: 12px;
+
+    .teamMgr-upload-shadow {
+      display: none;
+    }
+
+    .uploadWrapper {
+      float: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-right: 0;
+      width: auto;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 12px;
+      border-radius: 16px;
+      font-size: 12px;
+    }
+
+    .uploadWrapper img {
+      margin-right: 4px;
+    }
+
+    .teamMgr-header {
+      padding: 36px 12px 24px 12px;
+      height: auto;
+      font-size: 20px;
+      border-bottom: none;
+
+      .teamMgr-header-inner {
+        width: 100%;
+      }
+
+      .teamMgr-title-row {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+      }
+
+      .teamMgr-teamName {
+        font-weight: 600;
+        word-break: break-word;
+      }
+
+      .teamMgr-edit {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-top: 0;
+      }
+
+      .teamMgr-teamId {
+        padding-top: 6px;
+        font-size: 12px;
+        word-break: break-all;
+      }
+    }
+
+    .teamMgr-collection {
+      margin: 0;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .teamMgr-content {
+      width: 100%;
+      padding: 0 12px;
+      box-sizing: border-box;
+
+      .teamMgr-group-header {
+        height: 36px;
+        line-height: 36px;
+        margin-left: 0;
+
+        & > img {
+          margin-top: -36px;
+          margin-right: 4px;
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+        }
+      }
+
+      .teamMgr-group-footer {
+        height: 52px;
+
+        div {
+          padding-top: 42px;
+          font-size: 13px;
+        }
+      }
+
+      .teamMgr-group-bottom {
+        height: 36px;
+      }
+    }
+  }
+
+  .el-dialog.team-dialog {
+    width: 88% !important;
+    max-width: 360px;
+  }
 }
 </style>

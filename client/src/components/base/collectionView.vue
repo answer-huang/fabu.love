@@ -10,7 +10,7 @@
           <div class="appItem-info-namewrapper">
             <p class="nowrap" @click="gotoAppDetail(item)">{{ item.appName }}</p>
           </div>
-          <table style="width: 100%;table-layout: fixed;margin-top: 24px">
+          <table class="appItem-info-table">
             <tbody>
             <tr>
               <td class="appItem-info-title">短链接:</td>
@@ -187,6 +187,12 @@ export default {
   color: #000;
 }
 
+.appItem-info-table {
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 24px;
+}
+
 .appItem-info-title {
   font-size: 10px;
   color: #999;
@@ -245,14 +251,125 @@ export default {
   margin-right: 24px;
 }
 
-/*@media screen and (max-width: 840px) {*/
-/*.collectionView-wrapper .itemWrapper {*/
-/*width: 220px;*/
-/*}*/
-/*}*/
-/*@media screen and (max-width: 760px) {*/
-/*.collectionView-wrapper .itemWrapper {*/
-/*width: 240px;*/
-/*}*/
-/*}*/
+@media screen and (max-width: 768px) {
+  .collectionView-wrapper-ul {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .collectionView-wrapper .itemWrapper {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 6px;
+    padding: 12px;
+    text-align: left;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .itemWrapper:hover {
+    transform: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .collectionView-wrapper .itemWrapper .appItem-platform {
+    top: 6px;
+    left: -2px;
+    width: 32px;
+    height: 23px;
+    background-size: 32px 23px;
+    z-index: 1;
+  }
+
+  .itemWrapper .appItem-icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    margin-top: 0;
+  }
+
+  .itemWrapper .appItem-info {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+    min-width: 0;
+  }
+
+  .appItem-info-namewrapper p {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  .appItem-info-table {
+    margin-top: 4px;
+  }
+
+  .appItem-info-title {
+    width: 74px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 11px;
+    text-align: left;
+    padding-right: 4px;
+  }
+
+  .appItem-info-appInfo {
+    line-height: 18px;
+    font-size: 11px;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper button {
+    float: none;
+    width: auto;
+    min-width: 56px;
+    height: 28px;
+    margin-top: 0;
+    padding: 0 10px;
+    border-radius: 14px;
+    border-color: $mainColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 12px;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper button i {
+    font-size: 12px;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper button i:before {
+    color: $mainColor;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper button span {
+    position: static;
+    width: auto;
+    height: auto;
+    line-height: 1;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper .preview {
+    grid-column: 3;
+    grid-row: 1;
+    margin-right: 0;
+  }
+
+  .collectionView-wrapper-ul .itemWrapper .editor {
+    grid-column: 3;
+    grid-row: 2;
+    margin-right: 0;
+  }
+}
 </style>

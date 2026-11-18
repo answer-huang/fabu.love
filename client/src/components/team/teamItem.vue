@@ -1,9 +1,11 @@
 <template>
   <div class="teamItem">
-    <div>
+    <div class="teamItem-left">
       <div class="teamItem-circle" :class="color">{{ lastName }}</div>
-      <label class="teamItem-name">{{ user.username }}</label>
-      <div class="teamItem-email">| {{ user.email }}</div>
+      <div class="teamItem-user-info">
+        <label class="teamItem-name">{{ user.username }}</label>
+        <div class="teamItem-email"><span class="email-sep">| </span>{{ user.email }}</div>
+      </div>
     </div>
     <div class="teamItem-owner" @click.stop="roleAction">
       <label>{{ ownerString }}</label>
@@ -153,6 +155,18 @@ valueChanged();
   align-items: center;
   border-bottom: 1px solid rgba(10, 10, 10, 0.1);
 
+  .teamItem-left {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .teamItem-user-info {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
   .teamItem-circle {
     height: 44px;
     width: 44px;
@@ -163,6 +177,7 @@ valueChanged();
     color: white;
     font-size: 20px;
     margin-left: 24px;
+    flex-shrink: 0;
   }
 
   .teamItem-name {
@@ -213,6 +228,74 @@ valueChanged();
 
 .header-background-purple {
   background-color: rgb(143, 56, 170);
+}
+
+@media screen and (max-width: 768px) {
+  .teamItem {
+    height: auto;
+    min-height: 60px;
+    padding: 10px 4px;
+    box-sizing: border-box;
+    gap: 8px;
+
+    .teamItem-left {
+      flex: 1;
+    }
+
+    .teamItem-circle {
+      width: 38px;
+      height: 38px;
+      line-height: 38px;
+      border-radius: 19px;
+      font-size: 16px;
+      margin-left: 4px;
+    }
+
+    .teamItem-user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-left: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .teamItem-name {
+      margin-left: 0;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.3;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .teamItem-email {
+      margin-left: 0;
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.3;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      .email-sep {
+        display: none;
+      }
+    }
+
+    .teamItem-owner {
+      margin-right: 4px;
+      flex-shrink: 0;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
 }
 </style>
 

@@ -4,9 +4,11 @@
     <div class="applist-header">
       <div class="left" style="position: relative">
         <div
+          class="upload-shadow"
           style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 30px;left: 12px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
         <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传应用</el-button>
         <input
+          class="upload-file-input"
           alt=""
           title="上传应用"
           ref="referenceUpload"
@@ -307,6 +309,104 @@ export default {
 
   .platformActive {
     background-color: #e0e4fc;
+  }
+
+  @media screen and (max-width: 768px) {
+    .applist-wrapper {
+      min-width: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .applist-header {
+      height: auto;
+      padding-top: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .applist-header .left {
+      flex-shrink: 0;
+    }
+
+    .applist-header .upload-shadow {
+      display: none;
+    }
+
+    .applist-header .uploadWrapper {
+      float: none;
+      width: auto;
+      height: 34px;
+      line-height: 34px;
+      padding: 0 12px;
+      border-radius: 17px;
+      font-size: 12px;
+    }
+
+    .applist-header .uploadWrapper i {
+      margin-right: 4px;
+      font-size: 12px;
+    }
+
+    .applist-header .upload-file-input {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .applist-header-right {
+      float: none;
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .applist-header .platform-wrapper {
+      width: 80px;
+      height: 34px;
+      border-radius: 17px;
+      margin-right: 0;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .applist-header .platform-wrapper .platform-ios,
+    .applist-header .platform-wrapper .platform-android {
+      width: 50%;
+    }
+
+    .platformImg {
+      line-height: 32px;
+      font-size: 18px;
+    }
+
+    .applist-header .search-wrapper {
+      flex: 1;
+      width: auto;
+      min-width: 110px;
+      height: 34px;
+      border-radius: 17px;
+      box-sizing: border-box;
+    }
+
+    .el-icon-search {
+      left: 10px;
+      top: 9px;
+      font-size: 14px;
+    }
+
+    .applist-header-search {
+      left: 28px;
+      width: calc(100% - 36px);
+      height: 32px;
+      font-size: 12px;
+    }
   }
 
 </style>

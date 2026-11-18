@@ -128,6 +128,7 @@ import { useRoute, useRouter } from "vue-router";
     },
     methods: {
       clickSubItem(data) {
+        this.bus.emit('closeMobileMenu')
         if (data.index === '应用列表') {
           this.router.push('/apps')
         }
