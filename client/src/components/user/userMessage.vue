@@ -227,4 +227,22 @@
   .userMessage-wrapper-body .nomessage p {
     margin-top: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    .userMessage-wrapper {
+      top: 54px;
+    }
+
+    .userMessage-wrapper-body {
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .userMessage-wrapper-body .messageItem .content {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
+  }
 </style>

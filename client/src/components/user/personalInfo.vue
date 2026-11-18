@@ -170,4 +170,52 @@
     color: white !important;
     margin-left: calc(100% - 72px - 96px - 96px - 10px);
   }
+
+  @media screen and (max-width: 768px) {
+    .personalInfo-wrapper {
+      padding: 0 16px 40px 16px;
+    }
+
+    .emailWrapper {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .personalInfo-wrapper .emailTitle {
+      flex-shrink: 0;
+    }
+
+    .personalInfo-wrapper .email {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .personalInfoItem {
+      margin-top: 20px;
+      align-items: center;
+    }
+
+    .personalInfoItem p {
+      flex-shrink: 0;
+    }
+
+    .personalInfoItem input {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
+
+    .personalInfo-wrapper .el-button {
+      margin-top: 36px;
+      margin-bottom: 24px;
+    }
+
+    .personalInfo-wrapper .sureBtn {
+      margin-left: calc(50% - 102px);
+    }
+  }
 </style>

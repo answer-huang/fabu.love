@@ -116,4 +116,35 @@
     color: white !important;
     margin-left: calc(100% - 72px - 96px - 96px - 10px);
   }
+
+  @media screen and (max-width: 768px) {
+    .changePasswordWrapper {
+      padding: 0 16px 40px 16px;
+    }
+
+    .changePasswordWrapper .itemwrapper li {
+      margin-top: 20px;
+      align-items: center;
+    }
+
+    .changePasswordWrapper .itemwrapper p {
+      width: 76px;
+      flex-shrink: 0;
+    }
+
+    .changePasswordWrapper .itemwrapper input {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
+
+    .changePasswordWrapper .el-button {
+      margin-top: 36px;
+      margin-bottom: 24px;
+    }
+
+    .changePasswordWrapper .sureBtn {
+      margin-left: calc(50% - 102px);
+    }
+  }
 </style>

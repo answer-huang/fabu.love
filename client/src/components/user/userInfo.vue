@@ -322,5 +322,79 @@
         margin-left: 12px;
     }
 
+    @media screen and (max-width: 768px) {
+        .userInfo-wrapper {
+            top: 54px;
+        }
+
+        .userInfo-wrapper-body {
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .userInfo-wrapper-body .userWrapper {
+            padding: 16px 16px 0 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-sizing: border-box;
+        }
+
+        .userWrapper .imgwrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            margin-left: 0;
+            flex-shrink: 0;
+        }
+
+        .userWrapper .imgwrapper img {
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background-size: 56px 56px;
+        }
+
+        .userInfo-name-token {
+            height: auto;
+            min-height: 56px;
+            margin-left: 10px;
+            flex: 1;
+            min-width: 0;
+
+            .userInfo-name {
+                font-size: 18px;
+                line-height: 24px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .userInfo-apiToken-initButton {
+            margin-left: 0;
+            height: 32px;
+            font-size: 12px;
+            padding: 0 12px;
+        }
+
+        .userInfo-wrapper-nav {
+            margin-top: 16px;
+            height: 42px;
+            display: flex;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+
+        .userInfo-wrapper-nav-sub {
+            flex: 1;
+            width: auto;
+            height: 42px;
+            line-height: 42px;
+            margin-left: 0;
+        }
+    }
 
 </style>
