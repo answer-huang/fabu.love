@@ -83,6 +83,52 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!--移动端版本卡片列表-->
+      <div class="mobile-version-list">
+        <div
+          v-for="(row, idx) in dataArr"
+          :key="row._id || idx"
+          class="mobile-version-card"
+        >
+          <div class="mobile-version-card-header">
+            <div class="mobile-version-title">
+              <span v-if="getIconClass(row)" :class="getIconClass(row)" class="mobile-version-status-icon"></span>
+              <span class="mobile-version-str" v-html="getVersion(row)"></span>
+              <span
+                v-if="appInfo.releaseVersionId && appInfo.releaseVersionId === row._id"
+                class="mobile-version-tag tag-release"
+              >当前发布</span>
+              <span
+                v-else-if="appInfo.grayReleaseVersionId && appInfo.grayReleaseVersionId === row._id"
+                class="mobile-version-tag tag-gray"
+              >灰度版本</span>
+            </div>
+            <span class="mobile-version-time" v-html="getCreatTime(row.uploadAt)"></span>
+          </div>
+          <div class="mobile-version-meta">
+            <span>大小：{{ getAppSize(row.size) }}</span>
+            <span>下载次数：{{ getAllowDownLoadCount(row) }}</span>
+          </div>
+          <div v-if="row.changelog" class="mobile-version-changelog">
+            更新日志：{{ row.changelog }}
+          </div>
+          <div class="mobile-version-actions">
+            <button class="mobile-action-btn" @click="releaseApp(row)">
+              <i class="icon-ic_overview"></i><span>发布</span>
+            </button>
+            <button class="mobile-action-btn" @click="clickDownLoad(row)">
+              <i class="icon-ic_download"></i><span>下载</span>
+            </button>
+            <button class="mobile-action-btn" @click="clickEditor(row)">
+              <i class="icon-ic_edit"></i><span>编辑</span>
+            </button>
+            <button class="mobile-action-btn btn-danger" @click="clickDelete(row)">
+              <i class="icon-ic_delete"></i><span>删除</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="appversion-footerwrapper">
@@ -463,5 +509,255 @@
   }
   .appversion-footerwrapper .todaywrapper .downloadwrapper {
     background-color: #D5DFED;
+  }
+
+  .mobile-version-list {
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .appVersion-wrapper .detail-header-bottom {
+      border-radius: 0 0 8px 8px;
+      padding: 4px 12px;
+      box-sizing: border-box;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: auto;
+      padding: 8px 0;
+      border-bottom: 1px dashed #f0f2f7;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper:last-child {
+      border-bottom: none;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper .top {
+      width: auto;
+      height: 18px;
+      margin-left: 0;
+      margin-top: 0;
+      border-left: solid 3px $mainColor;
+      flex-shrink: 0;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper .top .title {
+      font-size: 13px;
+      line-height: 18px;
+      margin-left: 6px;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper .subWrapper {
+      margin-left: 12px;
+      margin-top: 0;
+      height: auto;
+      width: auto;
+      flex: 1;
+      min-width: 0;
+      text-align: right;
+    }
+
+    .appVersion-wrapper .detail-header-bottom .itemwrapper .subWrapper .subtitle {
+      font-size: 12px;
+      line-height: 18px;
+      word-break: break-all;
+    }
+
+    .detail-content-top {
+      height: 42px;
+      line-height: 42px;
+      font-size: 14px;
+      padding: 0 12px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .detail-content-top .top-right {
+      margin-right: 0;
+    }
+
+    .appVersion-wrapper .version-table {
+      display: none;
+    }
+
+    .mobile-version-list {
+      display: block;
+      background-color: white;
+      border-radius: 0 0 8px 8px;
+      padding: 0 12px;
+    }
+
+    .mobile-version-card {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f2f7;
+    }
+
+    .mobile-version-card:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-version-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .mobile-version-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .mobile-version-status-icon {
+      flex-shrink: 0;
+    }
+
+    .mobile-version-str {
+      font-size: 14px;
+      font-weight: 600;
+      color: $mainTitleColor;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mobile-version-tag {
+      font-size: 10px;
+      line-height: 16px;
+      padding: 0 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .mobile-version-tag.tag-release {
+      background-color: #e8ecff;
+      color: $mainColor;
+    }
+
+    .mobile-version-tag.tag-gray {
+      background-color: #f2f4f7;
+      color: #666;
+    }
+
+    .mobile-version-time {
+      font-size: 12px;
+      color: $subTitleColor;
+      flex-shrink: 0;
+    }
+
+    .mobile-version-meta {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: $subTitleColor;
+    }
+
+    .mobile-version-changelog {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .mobile-version-actions {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-action-btn {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 14px;
+      border: 1px solid #d5dfed;
+      background-color: white;
+      color: $mainTitleColor;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .mobile-action-btn i {
+      font-size: 12px;
+    }
+
+    .mobile-action-btn i:before {
+      color: $mainColor;
+    }
+
+    .mobile-action-btn.btn-danger {
+      border-color: #ffd6d6;
+      color: $warmRed;
+    }
+
+    .mobile-action-btn.btn-danger i:before {
+      color: $warmRed;
+    }
+
+    .appversion-footerwrapper {
+      padding: 12px;
+      border-radius: 8px;
+      align-items: center;
+    }
+
+    .appversion-footerwrapper .totalwrapper,
+    .appversion-footerwrapper .todaywrapper {
+      width: 50%;
+      height: auto;
+      padding-left: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .appversion-footerwrapper .totalwrapper {
+      border-right: 1px solid #eee;
+      padding-right: 8px;
+      box-sizing: border-box;
+    }
+
+    .appversion-footerwrapper .totalwrapper:after {
+      display: none;
+    }
+
+    .appversion-footerwrapper .todaywrapper {
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+
+    .appversion-footerwrapper .downloadwrapper {
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .appversion-footerwrapper .downloadwrapper i {
+      line-height: 34px;
+      font-size: 14px;
+    }
+
+    .appversion-footerwrapper p {
+      margin-left: 0;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .appversion-footerwrapper .downloadCount {
+      display: none;
+    }
   }
 </style>

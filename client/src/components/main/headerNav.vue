@@ -445,6 +445,14 @@ import { useRoute, useRouter } from "vue-router";
       line-height: 38px;
     }
 
+    .headernav-wrapper .leftWrapper .team .teamBtn div,
+    .headernav-wrapper .leftWrapper .team .teamBtn .el-icon {
+      height: 38px !important;
+      line-height: 38px !important;
+      display: inline-flex;
+      align-items: center;
+    }
+
     .headernav-wrapper .leftWrapper .detail p {
       height: 54px;
       line-height: 54px;

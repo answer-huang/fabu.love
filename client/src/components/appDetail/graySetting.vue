@@ -341,4 +341,40 @@
     color: white !important;
     margin-left: calc(100% - 72px - 96px - 96px - 10px);
   }
+
+  @media screen and (max-width: 768px) {
+    .graySetting-wrapper {
+      position: fixed;
+      top: 54px;
+    }
+
+    .graySetting-content {
+      width: 100%;
+      max-width: 100vw;
+      overflow-y: auto;
+      padding-bottom: 32px;
+      box-sizing: border-box;
+    }
+
+    .graySetting-content .top {
+      padding-left: 16px;
+    }
+
+    .graySetting-content .el-form {
+      margin-left: 16px;
+    }
+
+    .graySetting-content .listerapper {
+      width: 100%;
+    }
+
+    .graySetting-content .listerapper input,
+    .graySetting-content .listerapper .ipitem p {
+      width: calc(100% - 24px);
+    }
+
+    .graySetting-content .sureBtn {
+      margin-left: calc(50% - 102px);
+    }
+  }
 </style>

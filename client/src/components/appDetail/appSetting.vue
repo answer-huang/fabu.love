@@ -224,4 +224,64 @@
       }
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .appsetting-wrapper {
+      .top {
+        height: 42px;
+        line-height: 42px;
+        padding-left: 12px;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .content {
+        height: auto;
+        padding: 16px 12px 24px 12px;
+        border-radius: 0 0 8px 8px;
+        box-sizing: border-box;
+
+        .el-form {
+          margin-left: 0;
+
+          .el-form-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 14px;
+
+            .el-form-item__label {
+              width: auto !important;
+              line-height: 24px;
+              margin-right: 0;
+              margin-bottom: 4px;
+              font-weight: 500;
+            }
+
+            .el-form-item__content {
+              margin-left: 0 !important;
+              width: 100%;
+            }
+
+            .form-item-content {
+              width: 100%;
+              word-break: break-all;
+            }
+
+            .shorturl {
+              width: 120px;
+            }
+
+            .installtype {
+              width: 160px;
+              margin-top: 6px;
+            }
+
+            .merge-select {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

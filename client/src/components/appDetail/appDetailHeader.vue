@@ -12,8 +12,9 @@
           </div>
           <div class="rightwrapper" style="z-index: 1">
 
-            <el-button class="uploadWrapper button-style-main"><i class="icon-ic_upload"></i>上传新版本</el-button>
+            <el-button class="uploadWrapper button-style-main" @click="$refs.referenceUpload && $refs.referenceUpload.click()"><i class="icon-ic_upload"></i>上传新版本</el-button>
             <input
+              class="detail-upload-input"
               title="上传应用"
               ref="referenceUpload"
               accept=".ipa, .apk"
@@ -22,7 +23,7 @@
             <button class="preview button-style-border" @click="clickPreviewBtn">预览</button>
             <button class="delete button-style-border" @click="deleteApp">删除</button>
 
-            <div style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 68px;left: 36px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
+            <div class="detail-upload-shadow" style="width: 120px;height: 16px;background-color: #6477F2;position: absolute;top: 68px;left: 36px;border-radius: 10px;filter: blur(10px);z-index: -1"></div>
 
           </div>
         </div>
@@ -196,5 +197,101 @@
   }
   .detail-header-top .rightwrapper .uploadWrapper i {
     margin-right: 15px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .detail-header {
+      margin-top: 12px;
+    }
+
+    .detail-header-top {
+      height: auto;
+      padding: 12px;
+      border-radius: 8px 8px 0 0;
+      box-sizing: border-box;
+    }
+
+    .detail-header-top .appicon {
+      top: 12px;
+      left: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+    }
+
+    .detail-header-top .appname {
+      position: static;
+      margin-left: 60px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 22px;
+      min-height: 22px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-header-top .appType-platform-wrapper {
+      position: static;
+      margin-left: 60px;
+      margin-top: 4px;
+      min-height: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .appType-platform-wrapper .appType {
+      margin-right: 0;
+      font-size: 11px;
+    }
+
+    .appType-platform-wrapper .platform {
+      font-size: 12px;
+    }
+
+    .detail-header-top .rightwrapper {
+      float: none;
+      padding: 10px 0 0 0;
+      margin-top: 10px;
+      border-top: 1px solid #f2f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .detail-header-top .rightwrapper .detail-upload-shadow,
+    .detail-header-top .rightwrapper .detail-upload-input {
+      display: none;
+    }
+
+    .detail-header-top .rightwrapper .uploadWrapper {
+      float: none;
+      width: auto;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      margin-right: 0;
+    }
+
+    .detail-header-top .rightwrapper .uploadWrapper i {
+      margin-right: 4px;
+      font-size: 12px;
+    }
+
+    .detail-header-top .rightwrapper .preview,
+    .detail-header-top .rightwrapper .delete {
+      width: auto;
+      min-width: 52px;
+      height: 32px;
+      line-height: 30px;
+      padding: 0 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      margin-right: 0;
+    }
   }
 </style>

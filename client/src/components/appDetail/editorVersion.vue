@@ -229,4 +229,31 @@
     color: white !important;
     margin-left: calc(100% - 40px - 96px - 96px - 10px);
   }
+
+  @media screen and (max-width: 768px) {
+    .editorVersion-wrapper {
+      position: fixed;
+      top: 54px;
+    }
+
+    .editorVersion-content {
+      width: 100%;
+      max-width: 100vw;
+      overflow-y: auto;
+      padding-bottom: 32px;
+      box-sizing: border-box;
+    }
+
+    .editorVersion-content .top {
+      padding-left: 16px;
+    }
+
+    .editorVersion-content .el-form {
+      margin-left: 16px;
+    }
+
+    .editorVersion-content .sureBtn {
+      margin-left: calc(50% - 102px);
+    }
+  }
 </style>
