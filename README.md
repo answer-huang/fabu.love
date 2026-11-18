@@ -14,38 +14,64 @@ DOCKER_DEFAULT_PLATFORM=linux/amd64 \
 docker-compose up -d --build
 ```
 
-# 如何自己编译镜像
+# 如何自己编译、推送与发布镜像
 
-### 编译镜像
+### 方式一：使用脚本一键编译并推送（推荐）
+
+在项目根目录下直接运行 [build_and_push.sh](./build_and_push.sh)（会自动按当前时间戳 `YYYYMMDDHHmm` 生成版本号，完成编译、打标签和推送）：
 
 ```shell
+# 若本地尚未登录阿里云镜像仓库，请先登录：
+docker login --username=lai13544152930 crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com
 
-docker buildx build -t fabulove:202411272235 --platform=linux/amd64 -f docker/Dockerfile .
-
+# 一键编译并推送镜像
+./build_and_push.sh
 ```
 
-### 推送镜像
+---
+
+### 方式二：手动分步执行
+
+#### 1. 编译镜像（注意必须加 `--provenance=false` 兼容阿里云 ACR）
 
 ```shell
-
-docker push fabulove:202411272235
-
+TIMESTAMP=$(date +%Y%m%d%H%M)
+docker buildx build --provenance=false -t "fabulove:${TIMESTAMP}" --platform=linux/amd64 -f docker/Dockerfile .
 ```
 
-### 修改 docker-compose.yml
-
-* image 改为 fabulove:202411272235
-* FABU_BASE_URL 改为自己的域名
-
-### 运行镜像
-
-在 docker 目录下, 运行 docker-compose 命令
+#### 2. 打标签并推送至阿里云镜像仓库
 
 ```shell
+docker tag "fabulove:${TIMESTAMP}" "crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:${TIMESTAMP}"
+docker push "crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:${TIMESTAMP}"
+```
 
-cd docker
-docker-compose up -d
+---
 
+### 线上服务器发布与运行
+
+#### 1. SSH 登录线上服务器
+
+```shell
+ssh root@101.132.71.170
+```
+
+#### 2. 修改 `/home/fabu.love/docker/docker-compose.yml`
+
+将 `server` 下的 `image` 地址更新为刚刚推送的最新镜像标签：
+
+```yaml
+  server:
+    image: crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:<最新时间戳TAG>
+```
+
+#### 3. 拉取新镜像并重启容器
+
+在服务器的 `/home/fabu.love/docker` 目录下执行：
+
+```shell
+cd /home/fabu.love/docker
+docker-compose up -d --build
 ```
 
 # 运行
