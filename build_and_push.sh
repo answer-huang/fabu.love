@@ -10,7 +10,7 @@ TIMESTAMP=$(date +%Y%m%d%H%M)
 
 # 镜像名称
 IMAGE_NAME="fabulove:${TIMESTAMP}"
-REGISTRY_IMAGE="registry.cn-hangzhou.aliyuncs.com/great_free/fabulove:${TIMESTAMP}"
+REGISTRY_IMAGE="crpi-ybd4i5ioxjm9n86c.cn-shanghai.personal.cr.aliyuncs.com/answerhuang/fabulove:${TIMESTAMP}"
 
 echo "=========================================="
 echo "开始构建和推送 Docker 镜像"
@@ -22,7 +22,7 @@ echo ""
 
 # 步骤 1: 构建镜像
 echo "步骤 1/3: 正在构建镜像..."
-docker buildx build -t "${IMAGE_NAME}" --platform=linux/amd64 -f docker/Dockerfile .
+docker buildx build --provenance=false -t "${IMAGE_NAME}" --platform=linux/amd64 -f docker/Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ 镜像构建失败！"
