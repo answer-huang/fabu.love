@@ -49,6 +49,7 @@
         </el-button>
       </div>
       <el-table
+        class="desktop-cleanup-table"
         :data="orphanedFiles"
         style="width: 100%"
         stripe
@@ -78,6 +79,32 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- Mobile file list -->
+      <div class="mobile-cleanup-list">
+        <div
+          v-for="(item, idx) in orphanedFiles"
+          :key="item.filePath || idx"
+          class="mobile-cleanup-item"
+        >
+          <div class="mobile-file-path">{{ item.filePath }}</div>
+          <div class="mobile-file-meta">
+            <div class="mobile-file-info">
+              <span>{{ formatSize(item.size) }}</span>
+              <span class="meta-dot">·</span>
+              <span>{{ formatDate(item.modifiedAt) }}</span>
+            </div>
+            <el-button
+              type="danger"
+              size="small"
+              :loading="item._deleting"
+              @click="confirmDelete(item, idx)"
+            >
+              删除
+            </el-button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Initial state -->
@@ -346,6 +373,140 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-around;
+  }
+
+  .mobile-cleanup-list {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .data-cleanup {
+    margin: 12px 0;
+
+    .cleanup-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 16px;
+
+      .cleanup-title {
+        h2 {
+          font-size: 18px;
+          margin-bottom: 4px;
+        }
+        .subtitle {
+          font-size: 12px;
+          line-height: 1.4;
+        }
+      }
+
+      .scan-btn {
+        height: 38px;
+        min-width: 0;
+        width: 100%;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+    }
+
+    .cleanup-stats {
+      gap: 10px;
+      margin-bottom: 16px;
+
+      .stat-card {
+        max-width: none;
+        padding: 14px 16px;
+        border-radius: 10px;
+
+        .stat-number {
+          font-size: 20px;
+        }
+        .stat-label {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .cleanup-empty,
+    .cleanup-init {
+      padding: 48px 16px;
+
+      .empty-icon,
+      .init-icon {
+        font-size: 44px;
+        margin-bottom: 12px;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    }
+
+    .cleanup-table {
+      padding: 12px;
+      border-radius: 10px;
+
+      .table-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+
+        .table-tip {
+          font-size: 12px;
+          padding: 4px 8px;
+          flex: 1;
+          min-width: 180px;
+        }
+      }
+
+      .desktop-cleanup-table {
+        display: none;
+      }
+
+      .mobile-cleanup-list {
+        display: block;
+      }
+
+      .mobile-cleanup-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f2f7;
+
+        &:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+      }
+
+      .mobile-file-path {
+        font-family: monospace;
+        font-size: 12px;
+        color: #1a1a2e;
+        word-break: break-all;
+        line-height: 1.4;
+      }
+
+      .mobile-file-meta {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .mobile-file-info {
+        font-size: 12px;
+        color: #8a9ab5;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+
+    :deep(.el-dialog) {
+      width: 88% !important;
+      max-width: 360px;
+    }
   }
 }
 </style>

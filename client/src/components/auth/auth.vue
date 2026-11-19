@@ -468,9 +468,100 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .user {
+    overflow-y: auto;
+    background-size: cover;
+    background-position: center;
+  }
+
   .user-left {
     display: none;
     position: relative;
+  }
+
+  .user-right {
+    padding: 20px 16px;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .user-login-panel {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    padding-bottom: 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+  }
+
+  .user-login-title {
+    height: 56px;
+    padding-left: 24px;
+    font-size: 18px;
+    box-sizing: border-box;
+  }
+
+  .user-login-title p {
+    line-height: 56px;
+  }
+
+  .user-login-form,
+  .user-register-form {
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+
+  .user-login-form .user-login-form-input {
+    margin-top: 24px;
+  }
+
+  .user-register-form .user-login-form-input {
+    margin-top: 18px;
+  }
+
+  .user-login-form-input {
+    width: 100%;
+    height: 44px;
+  }
+
+  .user-login-form-input input {
+    height: 44px;
+  }
+
+  .user-register-form-btn,
+  .user-login-form-btn,
+  .user-login-form-btn:hover {
+    width: 100%;
+    height: 44px;
+    border-radius: 22px;
+  }
+
+  .user-login-form-btn {
+    margin-top: 28px;
+  }
+
+  .user-register-form-btn {
+    margin-top: 22px;
+  }
+
+  .user-login-form-label {
+    margin-top: 24px;
+    font-size: 14px;
+  }
+
+  .user-login-form-bottom {
+    float: none;
+    text-align: right;
+    margin-right: 0;
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
+
+  .el-message-box {
+    width: 88% !important;
+    max-width: 340px !important;
   }
 }
 
