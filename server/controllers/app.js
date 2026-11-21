@@ -496,22 +496,13 @@ module.exports = class AppRouter {
             }
         }
 
-        if (!version) {
-            ctx.body = responseWrapper(false, "当前没有可用版本可供下载")
-        } else {
-            ctx.body = responseWrapper({
-                app: app,
-                version: version
-            })
-        }
-
         // 查出历史版本,前50条
         let history = []
-        if (app.showHistory === true) {
-            history = await Version.find({appId: version.appId}).sort({uploadAt: -1}).limit(50)
+        if (app.showHistory === true && version) {
+            history = await Version.find({ appId: app.id }).sort({ uploadAt: -1 }).limit(50)
         }
 
-        ctx.body = responseWrapper({'app': app, 'version': version, history })
+        ctx.body = responseWrapper({ 'app': app, 'version': version || null, history })
     }
 
     @request('post', '/api/app/{appId}/{versionId}')
