@@ -24,7 +24,6 @@ const { v4: uuidV4 } = require('uuid');
 const apkParser3 = require('../library/apkparser/apkparser');
 const unzip = require('unzipper');
 const etl = require('etl');
-const mkdirp = require('mkdirp');
 const AppInfoParser = require('app-info-parser');
 const { compose, maxBy, filter, get } = require('lodash/fp');
 const text2png = require('text2png');
@@ -39,9 +38,9 @@ createFolderIfNeeded(tempDir);
 
 const uploadPrefix = 'upload';
 
-function createFolderIfNeeded(path) {
-  if ( !fs.existsSync(path) ) {
-    return mkdirp(path);
+function createFolderIfNeeded(dirPath) {
+  if ( !fs.existsSync(dirPath) ) {
+    fs.mkdirSync(dirPath, { recursive: true });
   }
 
   return Promise.resolve();

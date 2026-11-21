@@ -24,7 +24,6 @@ const Miniapp = require('../model/miniapp_model')
 const Team = require('../model/team')
 
 const tag = tags(['MiniAppResource']);
-const mkdirp = require('mkdirp')
 const { v1: uuidv1 } = require('uuid');
 
 //更新策略
@@ -408,10 +407,8 @@ function modifyFilter(filter) {
     return result
 }
 
-function createFolderIfNeeded(path) {
-    if (!fs.existsSync(path)) {
-        mkdirp.sync(path, function(err) {
-            if (err) console.error(err)
-        })
+function createFolderIfNeeded(dirPath) {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true })
     }
 }
