@@ -12,7 +12,7 @@
         ref="elmenu"
       >
         <!--不可以用v-if，否则会因为控件加载时序问题导致，指定选中的item失效-->
-        <div v-show="this.activeIndex !== '应用概述' && this.activeIndex !== '应用详情'">
+        <div v-show="this.activeIndex !== '应用概述' && this.activeIndex !== '应用设置' && this.activeIndex !== '应用详情'">
           <el-menu-item index="应用列表" @click="clickSubItem">
             <i class="icon-ic_applist"></i>
             <template #title>应用列表</template>
@@ -27,7 +27,7 @@
           </el-menu-item>
         </div>
 
-        <div v-show="this.activeIndex === '应用概述'">
+        <div v-show="this.activeIndex === '应用概述' || this.activeIndex === '应用设置'">
           <el-menu-item index="应用概述" @click="clickSubItem">
             <i class="icon-ic_appdes"></i>
             <template #title>应用概述</template>
@@ -89,6 +89,8 @@ import { useRoute, useRouter } from "vue-router";
       this.bus.on('appdetail', () => {
         this.activeIndex = '应用概述'
       })
+      this.bus.on('appSummary', this.handleAppSummary)
+      this.bus.on('appSetting', this.handleAppSetting)
       this.bus.on('miniAppDetail', () => {
         this.activeIndex = '应用详情'
       })
@@ -115,6 +117,9 @@ import { useRoute, useRouter } from "vue-router";
       if (this.route.fullPath === '/miniAppList') {
         this.activeIndex = '小程序列表'
       }
+      if (this.route.fullPath.indexOf('/app/') !== -1) {
+        this.activeIndex = '应用概述'
+      }
     },
     created() {
       this.router = useRouter()
@@ -123,10 +128,18 @@ import { useRoute, useRouter } from "vue-router";
     destroyed() {
       this.bus.off('applist')
       this.bus.off('appdetail')
+      this.bus.off('appSummary', this.handleAppSummary)
+      this.bus.off('appSetting', this.handleAppSetting)
       this.bus.off('miniApplist')
       this.bus.off('miniAppDetail')
     },
     methods: {
+      handleAppSummary() {
+        this.activeIndex = '应用概述'
+      },
+      handleAppSetting() {
+        this.activeIndex = '应用设置'
+      },
       clickSubItem(data) {
         this.bus.emit('closeMobileMenu')
         if (data.index === '应用列表') {

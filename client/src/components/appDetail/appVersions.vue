@@ -517,7 +517,7 @@
 
   @media screen and (max-width: 768px) {
     .appVersion-wrapper .detail-header-bottom {
-      border-radius: 0 0 8px 8px;
+      border-radius: 8px;
       padding: 4px 12px;
       box-sizing: border-box;
     }
