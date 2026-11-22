@@ -54,5 +54,10 @@
   },
   "resolutions": {
     "graceful-fs": "^4.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "canvas": "^3.2.3"
+    }
   }
 }

@@ -272,3 +272,14 @@
 .icon-ic_vision:before {
   content: "\e939";
 }
+
+.platformIcon-harmony {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: middle;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007DFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='10' r='6'/><line x1='5' y1='20' x2='19' y2='20'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 4px;
+}

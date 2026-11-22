@@ -99,8 +99,11 @@ async function parseAppAndInsertToDB(file, user, team) {
   } else if ( path.extname(filePath) === '.apk' ) {
     parser = parseApk;
     extractor = extractAPKIconV2;
+  } else if ( path.extname(filePath) === '.hap' ) {
+    parser = parseHap;
+    extractor = extractHapIcon;
   } else {
-    throw ( new Error('文件类型有误,仅支持IPA或者APK文件的上传.') );
+    throw ( new Error('文件类型有误,仅支持IPA、APK或者HAP文件的上传.') );
   }
 
   //解析ipa和apk文件
@@ -484,6 +487,145 @@ function extractApkIcon(filepath, guid, team) {
       });
     });
   });
+}
+
+///解析hap
+async function parseHap(filename) {
+  // Read ZIP entries
+  const directory = await unzip.Open.file(filename);
+
+  // Find module.json or config.json
+  const moduleEntry = directory.files.find(f => f.path === 'module.json');
+  const configEntry = directory.files.find(f => f.path === 'config.json');
+
+  let info = {
+    platform: 'harmony',
+    appName: '',
+    bundleId: '',
+    versionStr: '',
+    versionCode: 0,
+    iconName: ''
+  };
+
+  let configJson = null;
+  let isStageModel = false;
+
+  if (moduleEntry) {
+    const content = await moduleEntry.buffer();
+    configJson = JSON.parse(content.toString('utf8'));
+    isStageModel = true;
+  } else if (configEntry) {
+    const content = await configEntry.buffer();
+    configJson = JSON.parse(content.toString('utf8'));
+    isStageModel = false;
+  } else {
+    throw new Error('未找到 module.json 或 config.json，不是合法的鸿蒙 HAP 包');
+  }
+
+  // Parse fields
+  let rawAppName = '';
+  let rawIcon = '';
+
+  if (isStageModel) {
+    // Stage model module.json
+    const app = configJson.app || {};
+    const moduleInfo = configJson.module || {};
+
+    info.bundleId = app.bundleName || '';
+    info.versionCode = app.versionCode ? Number(app.versionCode) : 0;
+    info.versionStr = app.versionName || '';
+    rawAppName = app.label || (moduleInfo.abilities && moduleInfo.abilities[0] && moduleInfo.abilities[0].label) || '';
+    rawIcon = app.icon || (moduleInfo.abilities && moduleInfo.abilities[0] && moduleInfo.abilities[0].icon) || '';
+  } else {
+    // FA model config.json
+    const app = configJson.app || {};
+    const moduleInfo = configJson.module || {};
+
+    info.bundleId = app.bundleName || '';
+    if (app.version) {
+      info.versionCode = app.version.code ? Number(app.version.code) : 0;
+      info.versionStr = app.version.name || '';
+    }
+    rawAppName = app.label || (moduleInfo.abilities && moduleInfo.abilities[0] && moduleInfo.abilities[0].label) || '';
+    rawIcon = app.icon || (moduleInfo.abilities && moduleInfo.abilities[0] && moduleInfo.abilities[0].icon) || '';
+  }
+
+  // Resolve rawAppName if it's a resource (e.g. $string:app_name)
+  if (rawAppName && rawAppName.startsWith('$string:')) {
+    const stringKey = rawAppName.substring(8); // remove '$string:'
+    let resolvedName = '';
+
+    // Try to find in string.json
+    const stringEntries = [
+      directory.files.find(f => f.path === 'resources/zh_CN/element/string.json' || f.path === 'resources/zh-CN/element/string.json'),
+      directory.files.find(f => f.path === 'resources/base/element/string.json')
+    ].filter(Boolean);
+
+    for (const entry of stringEntries) {
+      try {
+        const buf = await entry.buffer();
+        const strData = JSON.parse(buf.toString('utf8'));
+        if (strData && Array.isArray(strData.string)) {
+          const matched = strData.string.find(item => item.name === stringKey);
+          if (matched && matched.value) {
+            resolvedName = matched.value;
+            break;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to parse string resource file:', e);
+      }
+    }
+
+    info.appName = resolvedName || stringKey;
+  } else {
+    info.appName = rawAppName || 'unknown';
+  }
+
+  // Handle icon name
+  if (rawIcon && rawIcon.startsWith('$media:')) {
+    info.iconName = rawIcon.substring(7);
+  } else if (rawIcon && rawIcon.startsWith('$profile:')) {
+    info.iconName = rawIcon.substring(9);
+  } else {
+    info.iconName = rawIcon || 'app_icon';
+  }
+
+  return info;
+}
+
+///提取hap图标
+async function extractHapIcon(filepath, guid, team) {
+  const hapInfo = await parseHap(filepath);
+  let iconName = hapInfo.iconName || 'app_icon';
+  let iconDir = path.join(uploadDir, team.id, 'icon');
+  let realPath = path.join(team.id, 'icon', `/${guid}_h.png`);
+  let tempOut = path.join(uploadDir, realPath);
+
+  const directory = await unzip.Open.file(filepath);
+
+  const regex = new RegExp(`\/media\/${iconName}\\.(png|webp|jpg|jpeg|svg)$`, 'i');
+  const matchedEntry = directory.files.find(f => regex.test(f.path));
+
+  await createFolderIfNeeded(iconDir);
+
+  if (matchedEntry) {
+    const buf = await matchedEntry.buffer();
+    fs.writeFileSync(tempOut, buf);
+    return { success: true, fileName: realPath };
+  } else {
+    // If not found, look for any image in base/media as fallback
+    const fallbackEntry = directory.files.find(f => f.path.startsWith('resources/base/media/') && /\.(png|webp|jpg|jpeg)$/i.test(f.path));
+    if (fallbackEntry) {
+      const buf = await fallbackEntry.buffer();
+      fs.writeFileSync(tempOut, buf);
+      return { success: true, fileName: realPath };
+    } else {
+      // Generate text icon if no image found
+      await generatePngWithText(tempOut, hapInfo.appName || 'Harmony App');
+      return { success: true, fileName: realPath };
+    }
+  }
 }
 
 ///格式化输入字符串 /用法: "node{0}".format('.js'), 返回'node.js'
