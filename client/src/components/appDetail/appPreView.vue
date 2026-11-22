@@ -57,8 +57,18 @@
           <p class="platform">适用于{{this.platformStr}}系统</p>
         </div>
 
-        <div v-if="history.length !== 0">
-          <ul>
+        <div v-if="history.length !== 0" class="history-versions">
+          <button
+            type="button"
+            class="history-toggle"
+            :aria-expanded="showHistoryVersions"
+            aria-controls="history-version-list"
+            @click="showHistoryVersions = !showHistoryVersions"
+          >
+            {{ showHistoryVersions ? '收起历史版本' : '展开历史版本' }}
+            <span aria-hidden="true">{{ showHistoryVersions ? '▲' : '▼' }}</span>
+          </button>
+          <ul id="history-version-list" v-show="showHistoryVersions">
             <li v-for="(item, index) in history" :key="index" @click="historyClickDownLoadBtn(item)">
               <div>{{item.versionStr}}(build {{item.versionCode}})</div>
               <div>{{formatTime(item.uploadAt)}}</div>
@@ -88,6 +98,7 @@
         pwd: '',
         isPhone: false,
         history: [],
+        showHistoryVersions: false,
         showWeChatModal: false,
         noPublishedVersion: false
       }
@@ -350,9 +361,28 @@
       }
     }
 
-    .preview-middlewrapper ul{
-      padding: 0;
+    .history-toggle {
+      border: 0;
+      border-radius: 20px;
+      padding: 10px 18px;
+      background: #f2f6f8;
+      color: #354052;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .history-toggle span {
+      margin-left: 4px;
+      font-size: 10px;
+    }
+
+    .preview-middlewrapper .history-versions {
       margin-top: 140px;
+    }
+
+    .preview-middlewrapper .history-versions ul {
+      padding: 0;
+      margin-top: 16px;
     }
   }
   .preview-middlewrapper {
