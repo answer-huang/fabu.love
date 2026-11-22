@@ -68,7 +68,7 @@
     data() {
       return {
         installType: '公开',
-        publishType: '手动发布',
+        publishType: '自动发布',
         installPwd: '',
         showHistory: '是',
         mergedId: '',
@@ -80,7 +80,7 @@
     },
     mounted() {
       this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
-      this.publishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
+      this.publishType = this.appInfo.autoPublish === false ? '手动发布' : '自动发布'
       this.showHistory = this.appInfo.showHistory === true ? '是' : '否'
       this.installPwd = this.appInfo.installPwd
       this.mergedId = this.appInfo.mergedId || ''

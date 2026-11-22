@@ -38,7 +38,7 @@ var appSchema = new Schema({
     },
     autoPublish: { //是否自动发布
         type: Boolean,
-        default: false
+        default: true
     },
     installWithPwd: {
         type: Boolean,

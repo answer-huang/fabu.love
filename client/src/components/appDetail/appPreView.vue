@@ -57,8 +57,20 @@
           <p class="platform">适用于{{this.platformStr}}系统</p>
         </div>
 
-        <div v-if="history.length !== 0">
-          <ul>
+        <div v-if="history.length !== 0" class="history-versions">
+          <button
+            type="button"
+            class="history-toggle"
+            :aria-expanded="showHistoryVersions"
+            :aria-label="showHistoryVersions ? '收起历史版本' : '展开历史版本'"
+            aria-controls="history-version-list"
+            @click="showHistoryVersions = !showHistoryVersions"
+          >
+            <svg :class="{ expanded: showHistoryVersions }" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <path d="M5 6l7 7 7-7M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <ul id="history-version-list" v-show="showHistoryVersions">
             <li v-for="(item, index) in history" :key="index" @click="historyClickDownLoadBtn(item)">
               <div>{{item.versionStr}}(build {{item.versionCode}})</div>
               <div>{{formatTime(item.uploadAt)}}</div>
@@ -88,6 +100,7 @@
         pwd: '',
         isPhone: false,
         history: [],
+        showHistoryVersions: false,
         showWeChatModal: false,
         noPublishedVersion: false
       }
@@ -350,9 +363,40 @@
       }
     }
 
-    .preview-middlewrapper ul{
-      padding: 0;
+    .history-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      padding: 10px;
+      background: #f2f6f8;
+      color: #354052;
+      cursor: pointer;
+    }
+
+    .history-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .history-toggle svg.expanded {
+      transform: rotate(180deg);
+    }
+
+    .preview-middlewrapper-forPhone .history-versions {
+      margin-top: 64px;
+    }
+
+    .preview-middlewrapper .history-versions {
       margin-top: 140px;
+    }
+
+    .preview-middlewrapper .history-versions ul {
+      padding: 0;
+      margin-top: 16px;
     }
   }
   .preview-middlewrapper {
